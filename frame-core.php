@@ -36,23 +36,13 @@ class FrameCore
 			define( 'WP_AUTO_UPDATE_CORE', false );
 
 
-		if ( WP_ENV == 'live' )
+		if ( WP_ENV == 'live' or WP_ENV == 'staging' )
 		{
-			$this->live();
+			add_action( 'admin_menu', array( $this, 'filter_admin_menu' ), 20 );
+
+			// Hide update messages
+			add_filter( 'pre_site_transient_update_core', create_function( '$a', "return null;" ) );
 		}
-	}
-
-
-
-	/**
-	 * Live site only
-	 */
-	function live()
-	{
-		add_action( 'admin_menu', array( $this, 'filter_admin_menu' ), 20 );
-
-		// Hide update messages
-		add_filter( 'pre_site_transient_update_core', create_function( '$a', "return null;" ) );
 	}
 
 
