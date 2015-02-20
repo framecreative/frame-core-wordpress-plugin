@@ -44,7 +44,9 @@ if ( isset( $_POST['testcookie'] ) && empty( $_COOKIE[ TEST_COOKIE ] ) ) {
 
 // Shake it!
 $shake_error_codes = array( 'empty_password', 'incorrect_password' );
-if ( $Password_Protected->errors->get_error_code() && in_array( $Password_Protected->errors->get_error_code(), $shake_error_codes ) ) {
+if ( FC()->password_protect->errors->get_error_code()
+     && in_array( FC()->password_protect->errors->get_error_code(), $shake_error_codes ) )
+{
 	add_action( 'password_protected_login_head', 'wp_shake_js', 12 );
 }
 
