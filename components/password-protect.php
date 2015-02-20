@@ -27,8 +27,6 @@ class FC_Password_Protected
 	{
 		$this->errors = new WP_Error();
 
-		add_filter( 'password_protected_is_active', array( $this, 'allow_ip_addresses' ) );
-
 		add_action( 'init', array( $this, 'disable_caching' ), 1 );
 		add_action( 'init', array( $this, 'maybe_process_login' ), 1 );
 		add_action( 'template_redirect', array( $this, 'maybe_show_login' ), -1 );
@@ -88,7 +86,6 @@ class FC_Password_Protected
 			{
 				$this->set_auth_cookie();
 				$redirect_to = isset( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : '';
-				$redirect_to = apply_filters( 'password_protected_login_redirect', $redirect_to );
 
 				if ( ! empty( $redirect_to ) )
 				{
@@ -151,21 +148,13 @@ class FC_Password_Protected
 		// Show login form
 		if ( isset( $_REQUEST['password-protected'] ) && 'login' == $_REQUEST['password-protected'] )
 		{
-
 			if ( empty( $default_theme_file ) )
 			{
-				$default_theme_file = dirname( __FILE__ ) . '/password-protect-login.php';
-			}
-
-			$theme_file = apply_filters( 'password_protected_theme_file', $default_theme_file );
-			if ( ! file_exists( $theme_file ) )
-			{
-				$theme_file = $default_theme_file;
+				$theme_file = dirname( __FILE__ ) . '/password-protect-login.php';
 			}
 
 			load_template( $theme_file );
 			exit();
-
 		}
 		else
 		{
@@ -173,8 +162,10 @@ class FC_Password_Protected
 			$redirect_to = add_query_arg( 'password-protected', 'login', home_url() );
 
 			// URL to redirect back to after login
-			$redirect_to_url = apply_filters( 'password_protected_login_redirect_url', ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] );
-			if ( ! empty( $redirect_to_url ) ) {
+			$redirect_to_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+				if ( ! empty( $redirect_to_url ) )
+			{
 				$redirect_to = add_query_arg( 'redirect_to', urlencode( $redirect_to_url ), $redirect_to );
 			}
 
@@ -194,7 +185,7 @@ class FC_Password_Protected
 	{
 
 		global $blog_id;
-		return 'bid_' . apply_filters( 'password_protected_blog_id', $blog_id );
+		return 'bid_' . $blog_id;
 
 	}
 
@@ -204,10 +195,8 @@ class FC_Password_Protected
 	 */
 	function logout()
 	{
-
 		$this->clear_auth_cookie();
 		do_action( 'password_protected_logout' );
-
 	}
 
 
@@ -243,7 +232,7 @@ class FC_Password_Protected
 			return false;
 		}
 
-		$pass = md5( get_option( 'password_protected_password' ) );
+		$pass = md5( $this->password );
 		$pass_frag = substr( $pass, 8, 4 );
 
 		$key = md5( $this->get_site_id() . $pass_frag . '|' . $expiration );
@@ -274,7 +263,7 @@ class FC_Password_Protected
 	 */
 	function generate_auth_cookie( $expiration, $scheme = 'auth' )
 	{
-		$pass = md5( get_option( 'password_protected_password' ) );
+		$pass = md5( $this->password );
 		$pass_frag = substr( $pass, 8, 4 );
 
 		$key = md5( $this->get_site_id() . $pass_frag . '|' . $expiration );
@@ -342,10 +331,8 @@ class FC_Password_Protected
 	 */
 	function clear_auth_cookie()
 	{
-
 		setcookie( $this->cookie_name(), ' ', current_time( 'timestamp' ) - 31536000, COOKIEPATH, COOKIE_DOMAIN );
 		setcookie( $this->cookie_name(), ' ', current_time( 'timestamp' ) - 31536000, SITECOOKIEPATH, COOKIE_DOMAIN );
-
 	}
 
 
