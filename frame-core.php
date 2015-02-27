@@ -23,14 +23,6 @@ class Frame_Core
 {
 
 	/**
-	 * Hides ACF from the admin menu of the live site as fields should only be added to the development install.
-	 *
-	 * @var array
-	 */
-	public $admin_menu_hidden_items = array( 'edit.php?post_type=acf-field-group' );
-
-
-	/**
 	 * @var string
 	 */
 	public $dir;
@@ -78,10 +70,11 @@ class Frame_Core
 			define( 'WP_AUTO_UPDATE_CORE', false );
 
 
+		add_action( 'admin_menu', array( &$this,'admin_remove_menu_pages'), 999 );
+
+
 		if ( WP_ENV == 'live' or WP_ENV == 'staging' )
 		{
-			add_action( 'admin_menu', array( $this, 'filter_admin_menu' ), 20 );
-
 			// Hide update messages
 			add_filter( 'pre_site_transient_update_core', create_function( '$a', "return null;" ) );
 		}
@@ -105,16 +98,24 @@ class Frame_Core
 
 
 	/**
-	 * Function to hide elements from the admin menu on the live site only
+	 * Clean up admin menu
 	 */
-	function filter_admin_menu()
+	function admin_remove_menu_pages()
 	{
-		global $menu;
-		foreach ( $menu as $key => $item )
-			if ( in_array($item[2], $this->admin_menu_hidden_items ) )
-				unset($menu[$key]);
-	}
+		remove_submenu_page( 'themes.php', 'theme-editor.php' );
+		remove_submenu_page( 'plugins.php', 'plugin-editor.php' );
 
+
+		// Remove customize.php
+		global $submenu;
+		unset($submenu['themes.php'][6]);
+
+		if ( WP_ENV == 'live' or WP_ENV == 'staging' )
+		{
+			// Hide ACF on live and staging
+			remove_menu_page( 'edit.php?post_type=acf-field-group' );
+		}
+	}
 
 
 
