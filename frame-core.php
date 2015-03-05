@@ -2,21 +2,17 @@
 /*
 
 Plugin Name: F / R / A / M / E / Core
-Plugin URI: http://framecreative.com
+Plugin URI: http://framecreative.com.au
 Version: 1.0.0
 Author: Daniel Bitzer
-Author URI: http://framecreative.com
+Author URI: http://framecreative.com.au
 Description: Designed to run with a fairly specific git workflow and wp-config.php
-
 
 Enable password protection using constants
 define('FC_PASSWORD_PROTECT_ENABLE', true);
 define('FC_PASSWORD_PROTECT_PASSWORD', 'frame123');
 
-
  */
-
-
 
 
 class Frame_Core
@@ -105,7 +101,6 @@ class Frame_Core
 		remove_submenu_page( 'themes.php', 'theme-editor.php' );
 		remove_submenu_page( 'plugins.php', 'plugin-editor.php' );
 
-
 		// Remove customize.php
 		global $submenu;
 		unset($submenu['themes.php'][6]);
@@ -114,6 +109,9 @@ class Frame_Core
 		{
 			// Hide ACF on live and staging
 			remove_menu_page( 'edit.php?post_type=acf-field-group' );
+
+			// Hide updates menu item
+			remove_submenu_page( 'index.php', 'update-core.php' );
 		}
 	}
 
