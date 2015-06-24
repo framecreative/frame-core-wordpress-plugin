@@ -105,7 +105,7 @@ class Frame_Core
 		global $submenu;
 		unset($submenu['themes.php'][6]);
 
-		if ( WP_ENV == 'live' or WP_ENV == 'staging' )
+		if ( WP_ENV !== 'dev' )
 		{
 			// Hide ACF on live and staging
 			remove_menu_page( 'edit.php?post_type=acf-field-group' );
