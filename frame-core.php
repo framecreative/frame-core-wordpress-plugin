@@ -4,13 +4,17 @@
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
 Version: 1.0.0
-Author: Daniel Bitzer
+Author: Frame
 Author URI: http://framecreative.com.au
 Description: Designed to run with a fairly specific git workflow and wp-config.php
 
 Enable password protection using constants
 define('FC_PASSWORD_PROTECT_ENABLE', true);
 define('FC_PASSWORD_PROTECT_PASSWORD', 'frame123');
+
+// Force URL options
+define('FC_FORCE_URL', 'lexstobie.com');
+define('FC_FORCE_SSL', true);
 
  */
 
