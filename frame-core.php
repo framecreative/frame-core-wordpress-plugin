@@ -69,7 +69,7 @@ class Frame_Core
 		add_action( 'admin_menu', array( &$this,'admin_remove_menu_pages'), 999 );
 
 
-		if ( WP_ENV == 'live' or WP_ENV == 'staging' )
+		if ( WP_ENV !== 'dev' )
 		{
 			// Hide update messages
 			add_filter( 'pre_site_transient_update_core', create_function( '$a', "return null;" ) );
@@ -108,7 +108,7 @@ class Frame_Core
 		global $submenu;
 		unset($submenu['themes.php'][6]);
 
-		if ( WP_ENV == 'live' or WP_ENV == 'staging' )
+		if ( WP_ENV !== 'dev' )
 		{
 			// Hide ACF on live and staging
 			remove_menu_page( 'edit.php?post_type=acf-field-group' );
