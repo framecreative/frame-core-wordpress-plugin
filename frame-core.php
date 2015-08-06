@@ -131,7 +131,7 @@ class Frame_Core
 	function force_url()
 	{
 		if ( ! defined( 'FC_FORCE_URL' ) )
-			define( 'FC_FORCE_URL', false );
+			return;
 
 		if ( ! defined( 'FC_FORCE_SSL' ) )
 			define( 'FC_FORCE_SSL', false );
