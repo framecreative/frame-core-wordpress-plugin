@@ -75,6 +75,9 @@ class Frame_Core
 			add_filter( 'pre_site_transient_update_core', create_function( '$a', "return null;" ) );
 		}
 
+
+		$this->force_url();
+
 		$this->load_components();
 	}
 
@@ -112,6 +115,34 @@ class Frame_Core
 
 			// Hide updates menu item
 			remove_submenu_page( 'index.php', 'update-core.php' );
+		}
+	}
+
+
+
+
+	/**
+	 * Force site URL based on constants
+	 */
+	function force_url()
+	{
+		if ( ! defined( 'FC_FORCE_URL' ) )
+			define( 'FC_FORCE_URL', false );
+
+		if ( ! defined( 'FC_FORCE_SSL' ) )
+			define( 'FC_FORCE_SSL', false );
+
+
+		if ( $_SERVER['HTTP_HOST'] != FC_FORCE_URL )
+		{
+			header( 'Location: http' . ( FC_FORCE_SSL ? 's' : '' ) . '://' . FC_FORCE_URL . $_SERVER['REQUEST_URI'] );
+			exit();
+		}
+
+		if( FC_FORCE_SSL && $_SERVER['HTTPS'] != 'on' )
+		{
+			header( "Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] );
+			exit();
 		}
 	}
 
