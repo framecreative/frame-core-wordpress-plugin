@@ -71,6 +71,7 @@ class Frame_Core
 
 
 		add_action( 'admin_menu', array( &$this,'admin_remove_menu_pages'), 999 );
+		add_action( 'wp_before_admin_bar_render', array( $this, 'before_admin_bar_render') );
 
 
 		if ( WP_ENV !== 'dev' )
@@ -120,6 +121,20 @@ class Frame_Core
 
 			// Hide updates menu item
 			remove_submenu_page( 'index.php', 'update-core.php' );
+		}
+	}
+
+
+	/**
+	 * Clean up
+	 */
+	function before_admin_bar_render()
+	{
+		global $wp_admin_bar;
+
+		if ( WP_ENV !== 'dev' )
+		{
+			$wp_admin_bar->remove_node('updates');
 		}
 	}
 
