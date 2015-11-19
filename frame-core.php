@@ -93,9 +93,10 @@ class Frame_Core
 	function load_components()
 	{
 		require_once $this->dir . 'components/password-protect.php';
-
+		require_once $this->dir . 'components/env-tag.php';
 
 		$this->password_protect = new FC_Password_Protected();
+		new FC_Env_Tag();
 	}
 
 
