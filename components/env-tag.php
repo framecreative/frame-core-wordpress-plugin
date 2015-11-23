@@ -4,8 +4,8 @@ class FC_Env_Tag
 {
 	function __construct()
 	{
-		add_action('wp_after_admin_bar_render', array($this,'js'));
-		add_action( 'admin_head', array($this,'css') );
+		add_action( 'wp_after_admin_bar_render', array($this,'js') );
+		add_action( 'wp_before_admin_bar_render', array($this,'css') );
 	}
 
 	function css()
