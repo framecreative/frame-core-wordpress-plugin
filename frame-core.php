@@ -70,15 +70,9 @@ class Frame_Core
 			define( 'WP_AUTO_UPDATE_CORE', false );
 
 
-		add_action( 'admin_menu', array( &$this,'admin_remove_menu_pages'), 999 );
+		add_action( 'admin_menu', array( $this,'admin_remove_menu_pages'), 999 );
+		add_action( 'admin_menu', array( $this,'remove_update_nag'), 999 );
 		add_action( 'wp_before_admin_bar_render', array( $this, 'before_admin_bar_render') );
-
-
-		if ( WP_ENV !== 'dev' )
-		{
-			// Hide update messages
-			add_filter( 'pre_site_transient_update_core', create_function( '$a', "return null;" ) );
-		}
 
 
 		$this->force_url();
@@ -121,6 +115,18 @@ class Frame_Core
 
 			// Hide updates menu item
 			remove_submenu_page( 'index.php', 'update-core.php' );
+		}
+	}
+
+
+	/**
+	 * Remove core update message
+	 */
+	function remove_update_nag()
+	{
+		if ( WP_ENV !== 'dev' )
+		{
+			remove_action('admin_notices', 'update_nag', 3);
 		}
 	}
 
