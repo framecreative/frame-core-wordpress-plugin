@@ -35,7 +35,7 @@ class Frame_Core
 
 
 	/**
-	 * @var instance of Password Protect component
+	 * @var FC_Password_Protected
 	 */
 	public $password_protect;
 
@@ -89,6 +89,7 @@ class Frame_Core
 	{
 		require_once $this->dir . 'components/password-protect.php';
 		require_once $this->dir . 'components/env-tag.php';
+		require_once $this->dir . 'components/disable-emojis.php';
 
 		$this->password_protect = new FC_Password_Protected();
 		new FC_Env_Tag();
