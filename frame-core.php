@@ -82,8 +82,7 @@ class Frame_Core
 		add_action( 'admin_menu', array( $this,'remove_update_nag'), 999 );
 		add_action( 'wp_before_admin_bar_render', array( $this, 'before_admin_bar_render') );
 
-
-		$this->force_url();
+		add_action( 'template_redirect', array( $this, 'force_url') );
 
 		$this->load_components();
 	}
@@ -172,7 +171,7 @@ class Frame_Core
 			exit();
 		}
 
-		if( FC_FORCE_SSL && $_SERVER['HTTPS'] != 'on' )
+		if ( FC_FORCE_SSL && $_SERVER['HTTPS'] != 'on' )
 		{
 			wp_redirect( "https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"], 301 );
 			exit();
