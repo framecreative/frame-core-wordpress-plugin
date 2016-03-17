@@ -165,15 +165,17 @@ class Frame_Core
 
 		if ( $_SERVER['HTTP_HOST'] != FC_FORCE_DOMAIN )
 		{
-			$ssl = FC_FORCE_SSL || FC_PREFER_SSL;
+			$ssl = FC_FORCE_SSL || FC_PREFER_SSL || is_ssl();
 
-			wp_redirect( 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'], 301 );
+			$url = 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'];
+
+			wp_redirect( esc_url( $url ), 301 );
 			exit();
 		}
 
-		if ( FC_FORCE_SSL && $_SERVER['HTTPS'] != 'on' )
+		if ( FC_FORCE_SSL && ! is_ssl() )
 		{
-			wp_redirect( "https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"], 301 );
+			wp_redirect( esc_url( "https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] ), 301 );
 			exit();
 		}
 	}
