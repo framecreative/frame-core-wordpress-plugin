@@ -13,8 +13,9 @@ define('FC_PASSWORD_PROTECT_ENABLE', true);
 define('FC_PASSWORD_PROTECT_PASSWORD', 'frame123');
 
 // Force URL options
-define('FC_FORCE_URL', 'lexstobie.com');
+define('FC_FORCE_DOMAIN', 'lexstobie.com');
 define('FC_FORCE_SSL', true);
+define('FC_PREFER_SSL', true);
 
  */
 
@@ -68,6 +69,13 @@ class Frame_Core
 
 		if ( ! defined( 'WP_AUTO_UPDATE_CORE' ) )
 			define( 'WP_AUTO_UPDATE_CORE', false );
+
+
+		if ( ! defined( 'FC_FORCE_SSL' ) )
+			define( 'FC_FORCE_SSL', false );
+
+		if ( ! defined( 'FC_PREFER_SSL' ) )
+			define( 'FC_PREFER_SSL', false );
 
 
 		add_action( 'admin_menu', array( $this,'admin_remove_menu_pages'), 999 );
@@ -153,16 +161,15 @@ class Frame_Core
 	 */
 	function force_url()
 	{
-		if ( ! defined( 'FC_FORCE_URL' ) )
+		if ( ! defined( 'FC_FORCE_DOMAIN' ) )
 			return;
 
-		if ( ! defined( 'FC_FORCE_SSL' ) )
-			define( 'FC_FORCE_SSL', false );
-
-
-		if ( $_SERVER['HTTP_HOST'] != FC_FORCE_URL )
+		if ( $_SERVER['HTTP_HOST'] != FC_FORCE_DOMAIN )
 		{
-			header( 'Location: http' . ( FC_FORCE_SSL ? 's' : '' ) . '://' . FC_FORCE_URL . $_SERVER['REQUEST_URI'] );
+			$ssl = FC_FORCE_SSL || FC_PREFER_SSL;
+
+			header( 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'] );
+			wp_redirect( 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'], 301 );
 			exit();
 		}
 
