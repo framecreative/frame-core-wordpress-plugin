@@ -168,14 +168,13 @@ class Frame_Core
 		{
 			$ssl = FC_FORCE_SSL || FC_PREFER_SSL;
 
-			header( 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'] );
 			wp_redirect( 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'], 301 );
 			exit();
 		}
 
 		if( FC_FORCE_SSL && $_SERVER['HTTPS'] != 'on' )
 		{
-			header( "Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] );
+			wp_redirect( "https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"], 301 );
 			exit();
 		}
 	}
