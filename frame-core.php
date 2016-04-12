@@ -112,10 +112,6 @@ class Frame_Core
 		remove_submenu_page( 'themes.php', 'theme-editor.php' );
 		remove_submenu_page( 'plugins.php', 'plugin-editor.php' );
 
-		// Remove customize.php
-		global $submenu;
-		unset($submenu['themes.php'][6]);
-
 		if ( WP_ENV !== 'dev' )
 		{
 			// Hide ACF on live and staging
