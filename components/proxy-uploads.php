@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 class FC_Proxy_Uploads {
 
@@ -14,14 +14,14 @@ class FC_Proxy_Uploads {
 
 	}
 
-	function proxy_upload() {
+	function proxy_upload( $currentTemplate ) {
 		global $wp;
 
 		$this->currentUrl = home_url( $wp->request );
 		$this->uploadsInfo = wp_upload_dir();
 
 		if ( !stristr( $this->currentUrl, $this->uploadsInfo['baseurl'] ) ) {
-			return;
+			return $currentTemplate;
 		}
 
 		$proxyUrl = str_replace( $this->uploadsInfo['baseurl'], FC_PROXY_UPLOADS_URL, $this->currentUrl );
@@ -29,7 +29,7 @@ class FC_Proxy_Uploads {
 		$this->response = wp_remote_get( $proxyUrl );
 
 		if ( is_wp_error($this->response) || 200 != $this->response['response']['code'] ) {
-			return;
+			return $currentTemplate;
 		}
 
 		if ( !defined('FC_PROXY_DISPLAY_ONLY') || !FC_PROXY_DISPLAY_ONLY ) {
@@ -61,13 +61,13 @@ class FC_Proxy_Uploads {
 
 		if ( !function_exists('WP_Filesystem')) require ABSPATH.'wp-admin/includes/file.php';
 
-		global $wp_filesystem; 
+		global $wp_filesystem;
 		WP_Filesystem();
 
 		$pathname = str_replace( $this->uploadsInfo['baseurl'], $this->uploadsInfo['basedir'], $this->currentUrl );
 		$dir = dirname( $pathname );
 
-		if ( !is_dir( $dir ) && !wp_mkdir_p( $dir ) ) { 
+		if ( !is_dir( $dir ) && !wp_mkdir_p( $dir ) ) {
 			$this->display_and_exit();
 		}
 
@@ -76,32 +76,5 @@ class FC_Proxy_Uploads {
 		$this->display_and_exit();
 
 	}
-	
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
