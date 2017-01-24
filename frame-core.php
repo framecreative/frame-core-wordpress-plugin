@@ -3,7 +3,7 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 1.0.1
+Version: 1.0.2
 Author: Frame
 Author URI: http://framecreative.com.au
 Description: Designed to run with a fairly specific git workflow and wp-config.php
@@ -99,10 +99,13 @@ class Frame_Core
 		require_once $this->dir . 'components/env-tag.php';
 		require_once $this->dir . 'components/disable-emojis.php';
 		require_once $this->dir . 'components/proxy-uploads.php';
+		require_once $this->dir . 'components/smtp.php';
 
 		$this->password_protect = new FC_Password_Protected();
 		new FC_Env_Tag();
 		new FC_Proxy_Uploads();
+		new FC_SMTP();
+
 	}
 
 
