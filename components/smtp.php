@@ -14,6 +14,8 @@ class FC_SMTP {
 		$smtpUser = getenv('SMTP_USER');
 		$smtpPassword = getenv('SMTP_PASSWORD');
 		$smtpPort = getenv('SMTP_PORT');
+		$smtpFrom = getenv('SMTP_FROM');
+		$smtpFromName = getenv('SMTP_FROM_NAME');
 
 		if ( $smtpHost && $smtpUser && $smtpPassword ) {
 
@@ -33,6 +35,9 @@ class FC_SMTP {
 			$phpmailer->SMTPSecure = FALSE;
 
 		}
+
+		if ( $smtpFrom ) 		$phpmailer->From = $smtpFrom;
+		if ( $smtpFromName ) 	$phpmailer->FromName = $smtpFromName;
 
 	}
 
