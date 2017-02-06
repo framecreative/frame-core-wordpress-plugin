@@ -9,7 +9,7 @@ Author URI: http://framecreative.com.au
 Description: Designed to run with a fairly specific git workflow and wp-config.php
 
 Bitbucket Plugin URI: https://bitbucket.org/framecreative/frame-core
-Bitbucket Branch: live
+Bitbucket Branch: master
 
 Enable password protection using constants
 define('FC_PASSWORD_PROTECT_ENABLE', true);
