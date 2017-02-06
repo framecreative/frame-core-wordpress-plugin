@@ -85,8 +85,7 @@ class Frame_Core
 		add_action( 'admin_menu', array( $this,'remove_update_nag'), 999 );
 		add_action( 'wp_before_admin_bar_render', array( $this, 'before_admin_bar_render') );
 
-
-		$this->force_url();
+		add_action( 'template_redirect', array( $this, 'force_url') );
 
 		$this->load_components();
 	}
@@ -120,10 +119,6 @@ class Frame_Core
 	{
 		remove_submenu_page( 'themes.php', 'theme-editor.php' );
 		remove_submenu_page( 'plugins.php', 'plugin-editor.php' );
-
-		// Remove customize.php
-		global $submenu;
-		unset($submenu['themes.php'][6]);
 
 		if ( WP_ENV !== 'dev' )
 		{
@@ -174,16 +169,17 @@ class Frame_Core
 
 		if ( $_SERVER['HTTP_HOST'] != FC_FORCE_DOMAIN )
 		{
-			$ssl = FC_FORCE_SSL || FC_PREFER_SSL;
+			$ssl = FC_FORCE_SSL || FC_PREFER_SSL || is_ssl();
 
-			header( 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'] );
-			wp_redirect( 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'], 301 );
+			$url = 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'];
+
+			wp_redirect( esc_url( $url ), 301 );
 			exit();
 		}
 
-		if( FC_FORCE_SSL && $_SERVER['HTTPS'] != 'on' )
+		if ( FC_FORCE_SSL && ! is_ssl() )
 		{
-			header( "Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] );
+			wp_redirect( esc_url( "https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] ), 301 );
 			exit();
 		}
 	}
