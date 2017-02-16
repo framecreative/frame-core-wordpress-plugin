@@ -3,7 +3,7 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 1.0.5
+Version: 1.0.6
 Author: Frame
 Author URI: http://framecreative.com.au
 Description: Designed to run with a fairly specific git workflow and wp-config.php
@@ -102,6 +102,10 @@ class Frame_Core
 		require_once $this->dir . 'components/disable-emojis.php';
 		require_once $this->dir . 'components/proxy-uploads.php';
 		require_once $this->dir . 'components/smtp.php';
+
+		if ( is_admin() ) {
+			require_once $this->dir . 'components/disable-admin-nags.php';
+		}
 
 		$this->password_protect = new FC_Password_Protected();
 		new FC_Env_Tag();
