@@ -12,11 +12,13 @@
 /*
  * Will remove the 'install woothemes updater' nag as we use composer
  */
+if ( ! function_exists( 'woothemes_updater_notice' ) ) {
 
- function woothemes_updater_notice() {
- 	return '';
- }
+  function woothemes_updater_notice() {
+    return '';
+  }
 
+}
 
 class FC_Disable_Admin_Nags {
 
