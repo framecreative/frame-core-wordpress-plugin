@@ -102,6 +102,7 @@ class Frame_Core
 		require_once $this->dir . 'components/disable-emojis.php';
 		require_once $this->dir . 'components/proxy-uploads.php';
 		require_once $this->dir . 'components/smtp.php';
+		require_once $this->dir . 'components/helpers.php';
 
 		if ( is_admin() ) {
 			require_once $this->dir . 'components/disable-admin-nags.php';
