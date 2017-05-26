@@ -131,9 +131,9 @@ class Frame_Core
 		} else {
 
 			$current_user = wp_get_current_user();
-			$devUser = $this->get_configuration_value( 'FC_DEV_USER' );
+			$devUser = $this->get_configuration_value( 'FC_DEV_USER', 'frame' );
 
-			$this->is_dev_user = ( $devUser && $devUser == $current_user->user_login );
+			$this->is_dev_user = ( $devUser == $current_user->user_login );
 
 		}
 
