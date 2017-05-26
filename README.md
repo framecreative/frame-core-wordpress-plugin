@@ -18,4 +18,15 @@ We welcome PRs from within the Frame team, however please keep the following in 
 * Changes to the DB, or generation of client side markup, is not recommended
 * All module functionality should be opt-in, with sensible defaults
 
+## Core Functions ##
+
+** Force / Prefer SSL **
+Use to force redirection to the SSL version of the site. We prefer to do this via Apache / NGINX, but this is useful for servers we don't control etc
+
+Usage:
+`define('FC_FORCE_SSL', true);`
+
+
+
+
 ## Current Modules ##
