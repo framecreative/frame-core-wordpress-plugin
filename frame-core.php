@@ -12,14 +12,12 @@ Bitbucket Plugin URI: https://bitbucket.org/framecreative/frame-core
 Bitbucket Branch: master
 
 Enable password protection using constants
-define('FC_PASSWORD_PROTECT_ENABLE', true);
 define('FC_PASSWORD_PROTECT_PASSWORD', 'frame123');
 
 // Force URL options
 define('FC_FORCE_DOMAIN', 'lexstobie.com');
 define('FC_FORCE_SSL', true);
 define('FC_PREFER_SSL', true);
-
  */
 
 
@@ -43,9 +41,11 @@ class Frame_Core
 	 */
 	public $password_protect;
 
-
-
 	public $is_dev_user;
+
+	public $is_code_managed;
+
+	public $is_site_maintained;
 
 
 
@@ -55,19 +55,20 @@ class Frame_Core
 	protected static $_instance = null;
 
 
-
 	/**
 	 * Init
 	 */
 	function __construct()
 	{
+
+		self::$_instance = $this;
+
 		/**
 		 * Useful...
 		 */
 
 		$this->dir = plugin_dir_path( __FILE__ );
 		$this->uri = plugins_url( '', __FILE__ );
-
 
 		/*
 		 * Disable automatic updates these should be managed through git
@@ -79,18 +80,9 @@ class Frame_Core
 		if ( ! defined( 'DISALLOW_FILE_EDIT' ) )
 			define( 'DISALLOW_FILE_EDIT', true );
 
-		if ( ! defined( 'FC_FORCE_SSL' ) )
-			define( 'FC_FORCE_SSL', false );
 
-		if ( ! defined( 'FC_PREFER_SSL' ) )
-			define( 'FC_PREFER_SSL', false );
-
-		if ( !defined( 'FC_CODE_MANAGED' ) )
-			define( 'FC_CODE_MANAGED', true );
-
-		if ( !defined( 'FC_SITE_MAINTAINED' ) )
-			define( 'FC_SITE_MAINTAINED', false );
-
+		$this->is_code_managed = $this->get_configuration_value( 'FC_CODE_MANAGED', true );
+		$this->is_site_maintained = $this->get_configuration_value( 'FC_SITE_MAINTAINED', false );
 
 		add_action( 'init', array( $this, 'check_for_dev_user' ) );
 
@@ -139,7 +131,9 @@ class Frame_Core
 		} else {
 
 			$current_user = wp_get_current_user();
-			$this->is_dev_user = ( defined('FC_DEV_USER') && FC_DEV_USER == $current_user->user_login );
+			$devUser = $this->get_configuration_value( 'FC_DEV_USER' );
+
+			$this->is_dev_user = ( $devUser && $devUser == $current_user->user_login );
 
 		}
 
@@ -152,7 +146,7 @@ class Frame_Core
 			return $allcaps;
 		}
 
-		if ( FC_CODE_MANAGED || FC_SITE_MAINTAINED ) {
+		if ( $this->is_code_managed || $this->is_site_maintained ) {
 
 			$allcaps['install_themes'] = false;
 			$allcaps['switch_themes'] = false;
@@ -161,7 +155,7 @@ class Frame_Core
 
 		}
 
-		if ( FC_SITE_MAINTAINED ) {
+		if ( $this->is_site_maintained ) {
 
 			$allcaps['update_plugins'] = false;
 			$allcaps['update_core'] = false;
@@ -180,7 +174,7 @@ class Frame_Core
 			return;
 		}
 
-		if ( FC_CODE_MANAGED || FC_SITE_MAINTAINED ) {
+		if ( $this->is_code_managed || $this->is_site_maintained ) {
 
 			?>
 			<div class="notice notice-warning">
@@ -218,24 +212,60 @@ class Frame_Core
 	 */
 	function force_url()
 	{
-		if ( ! defined( 'FC_FORCE_DOMAIN' ) )
+
+		$forceDomain = 	$this->get_configuration_value( 'FC_FORCE_DOMAIN', false );
+		$forceSSL = 	$this->get_configuration_value( 'FC_FORCE_SSL', false );
+		$preferSSL = 	$this->get_configuration_value( 'FC_PREFER_SSL', false );
+
+		if ( ! $forceDomain )
 			return;
 
-		if ( $_SERVER['HTTP_HOST'] != FC_FORCE_DOMAIN )
+		if ( $_SERVER['HTTP_HOST'] != $forceDomain )
 		{
-			$ssl = FC_FORCE_SSL || FC_PREFER_SSL || is_ssl();
+			$ssl = $forceSSL || $preferSSL || is_ssl();
 
-			$url = 'http' . ( $ssl ? 's' : '' ) . '://' . FC_FORCE_DOMAIN . $_SERVER['REQUEST_URI'];
+			$url = 'http' . ( $ssl ? 's' : '' ) . '://' . $forceDomain . $_SERVER['REQUEST_URI'];
 
 			wp_redirect( esc_url( $url ), 301 );
 			exit();
 		}
 
-		if ( FC_FORCE_SSL && ! is_ssl() )
+		if ( $forceSSL && ! is_ssl() )
 		{
 			wp_redirect( esc_url( "https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"] ), 301 );
 			exit();
 		}
+	}
+
+	/**
+	 * Checks for value as constant and then as environment variable
+	 * */
+	function get_configuration_value( $name, $default = null ) {
+
+		if ( defined( $name ) ) {
+
+			return constant($name);
+
+		} elseif ( $envValue = getenv($name) ) {
+
+			switch ( $envValue ) {
+				case 'true' :
+					return true;
+
+				case 'false' :
+					return false;
+
+				default :
+					return $envValue;
+
+			}
+
+		} else {
+
+			return $default;
+
+		}
+
 	}
 
 
