@@ -5,10 +5,15 @@ class FC_Proxy_Uploads {
 	var $uploadsInfo;
 	var $response;
 	var $currentUrl;
+	var $proxyUrl;
+	var $displayOnly;
 
 	function __construct() {
 
-		if ( defined('FC_PROXY_UPLOADS_URL') ) {
+		$this->proxyUrl = FC()->get_configuration_value( 'FC_PROXY_UPLOADS_URL' );
+		$this->displayOnly = FC()->get_configuration_value( 'FC_PROXY_DISPLAY_ONLY', false );
+
+		if ( $this->proxyUrl ) {
 			add_filter( '404_template', array( $this, 'proxy_upload' ) );
 		}
 
@@ -24,7 +29,7 @@ class FC_Proxy_Uploads {
 			return $currentTemplate;
 		}
 
-		$proxyUrl = str_replace( $this->uploadsInfo['baseurl'], FC_PROXY_UPLOADS_URL, $this->currentUrl );
+		$proxyUrl = str_replace( $this->uploadsInfo['baseurl'], $this->proxyUrl, $this->currentUrl );
 
 		$this->response = wp_remote_get( $proxyUrl );
 
@@ -32,7 +37,7 @@ class FC_Proxy_Uploads {
 			return $currentTemplate;
 		}
 
-		if ( !defined('FC_PROXY_DISPLAY_ONLY') || !FC_PROXY_DISPLAY_ONLY ) {
+		if ( !$this->displayOnly ) {
 			$this->attempt_download();
 		} else {
 			$this->display_and_exit();

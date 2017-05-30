@@ -25,6 +25,13 @@ class FC_Password_Protected
 	 */
 	function __construct()
 	{
+
+		$this->password = FC()->get_configuration_value( 'FC_PASSWORD_PROTECT_PASSWORD' );
+
+		if ( !$this->password ) {
+			return;
+		}
+
 		$this->errors = new WP_Error();
 
 		add_action( 'init', array( $this, 'disable_caching' ), 1 );
@@ -33,13 +40,6 @@ class FC_Password_Protected
 		add_action( 'password_protected_login_messages', array( $this, 'login_messages' ) );
 
 
-		// If no password defined, set to 'password'
-		if ( ! defined( 'FC_PASSWORD_PROTECT_PASSWORD' ) )
-		{
-			define('FC_PASSWORD_PROTECT_PASSWORD', 'password');
-		}
-
-		$this->password = FC_PASSWORD_PROTECT_PASSWORD;
 	}
 
 
@@ -48,36 +48,18 @@ class FC_Password_Protected
 	 */
 	function disable_caching()
 	{
-		if ( $this->is_active() && ! defined( 'DONOTCACHEPAGE' ) )
+		if ( ! defined( 'DONOTCACHEPAGE' ) )
 		{
 			define( 'DONOTCACHEPAGE', true );
 		}
 	}
-
-
-	/**
-	 * Is Active
-	 *
-	 * @return boolean
-	 */
-	function is_active()
-	{
-		// Init if enabled
-		if ( defined( 'FC_PASSWORD_PROTECT_ENABLE' ) && FC_PASSWORD_PROTECT_ENABLE == true  )
-		{
-			return true;
-		}
-	}
-
-
-
 
 	/**
 	 * Maybe Process Login
 	 */
 	function maybe_process_login() {
 
-		if ( $this->is_active() && isset( $_REQUEST['password_protected_pwd'] ) )
+		if ( isset( $_REQUEST['password_protected_pwd'] ) )
 		{
 			$password_input = $_REQUEST['password_protected_pwd'];
 
@@ -132,12 +114,6 @@ class FC_Password_Protected
 	 * Maybe Show Login
 	 */
 	function maybe_show_login() {
-
-		// Don't show login if not enabled
-		if ( ! $this->is_active() )
-		{
-			return;
-		}
 
 		// Logged in
 		if ( $this->validate_auth_cookie() )

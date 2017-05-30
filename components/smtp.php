@@ -10,12 +10,19 @@ class FC_SMTP {
 
 	function configure( $phpmailer ) {
 
-		$smtpHost = getenv('SMTP_HOST');
-		$smtpUser = getenv('SMTP_USER');
-		$smtpPassword = getenv('SMTP_PASSWORD');
-		$smtpPort = getenv('SMTP_PORT');
-		$smtpFrom = getenv('SMTP_FROM');
-		$smtpFromName = getenv('SMTP_FROM_NAME');
+		$smtpHost = 		FC()->get_configuration_value('FC_SMTP_HOST');
+		$smtpUser = 		FC()->get_configuration_value('FC_SMTP_USER');
+		$smtpPassword = 	FC()->get_configuration_value('FC_SMTP_PASSWORD');
+		$smtpPort = 		FC()->get_configuration_value('FC_SMTP_PORT');
+		$smtpFrom = 		FC()->get_configuration_value('FC_SMTP_FROM');
+		$smtpFromName = 	FC()->get_configuration_value('FC_SMTP_FROM_NAME');
+
+		if (!$smtpHost) 		$smtpHost = 		FC()->get_configuration_value('SMTP_HOST');
+		if (!$smtpUser) 		$smtpUser = 		FC()->get_configuration_value('SMTP_USER');
+		if (!$smtpPassword) 	$smtpPassword = 	FC()->get_configuration_value('SMTP_PASSWORD');
+		if (!$smtpPort) 		$smtpPort = 		FC()->get_configuration_value('SMTP_PORT');
+		if (!$smtpFrom) 		$smtpFrom = 		FC()->get_configuration_value('SMTP_FROM');
+		if (!$smtpFromName) 	$smtpFromName = 	FC()->get_configuration_value('SMTP_FROM_NAME');
 
 		if ( $smtpHost && $smtpUser && $smtpPassword ) {
 
