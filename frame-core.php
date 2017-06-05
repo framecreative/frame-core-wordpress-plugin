@@ -11,14 +11,7 @@ Description: Designed to run with a fairly specific git workflow and wp-config.p
 Bitbucket Plugin URI: https://bitbucket.org/framecreative/frame-core
 Bitbucket Branch: master
 
-Enable password protection using constants
-define('FC_PASSWORD_PROTECT_PASSWORD', 'frame123');
-
-// Force URL options
-define('FC_FORCE_DOMAIN', 'lexstobie.com');
-define('FC_FORCE_SSL', true);
-define('FC_PREFER_SSL', true);
- */
+*/
 
 
 class Frame_Core
