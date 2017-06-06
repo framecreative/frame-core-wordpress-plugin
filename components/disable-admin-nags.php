@@ -20,11 +20,33 @@ if ( ! function_exists( 'woothemes_updater_notice' ) ) {
 
 }
 
+/**
+ * Remove the Extension Works Framework plugin nag
+ */
+if ( ! function_exists( 'ew_framework_notice' ) ) {
+    function ew_framework_notice(){
+        return '';
+    }
+}
+if ( ! function_exists( 'inactived_plugin_notification' ) ) {
+    function inactived_plugin_notification(){
+        return '';
+    }
+}
+
+/**
+ * Remove the WC CBA update plugin nag
+ */
 class FC_Disable_Admin_Nags {
 
   public function __construct() {
-      //add other plugins we commonly use (Yoast?)
+      add_action( 'admin_notices', [ $this, 'remove_extensionworks_activation_notice'], 1);
   }
 
-
+  public function remove_extensionworks_activation_notice(){
+      if ( ! array_key_exists( 'ew_updater', $GLOBALS ) )  return;
+      $instance = $GLOBALS['ew_updater']->admin;
+      remove_action( 'admin_notices', [ $instance, 'inactived_plugin_notification'], 10 );
+  }
 }
+
