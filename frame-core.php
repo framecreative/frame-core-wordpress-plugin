@@ -104,6 +104,7 @@ class Frame_Core
 
 		if ( is_admin() ) {
 			require_once $this->dir . 'components/disable-admin-nags.php';
+			new FC_Disable_Admin_Nags();
 		}
 
 		$this->password_protect = new FC_Password_Protected();
