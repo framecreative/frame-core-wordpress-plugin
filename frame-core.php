@@ -3,7 +3,7 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 1.0.11
+Version: 1.0.12
 Author: Frame
 Author URI: http://framecreative.com.au
 Description: Designed to run with a fairly specific git workflow and wp-config.php
@@ -40,6 +40,8 @@ class Frame_Core
 
 	public $is_site_maintained;
 
+	public $is_live_env;
+
 
 
 	/**
@@ -74,10 +76,14 @@ class Frame_Core
 			define( 'DISALLOW_FILE_EDIT', true );
 
 
+		$this->is_live_env = in_array( WP_ENV, [ 'live', 'production' ] );
+
 		$this->is_code_managed = $this->get_configuration_value( 'FC_CODE_MANAGED', true );
 		$this->is_site_maintained = $this->get_configuration_value( 'FC_SITE_MAINTAINED', false );
 
 		add_action( 'init', array( $this, 'check_for_dev_user' ) );
+
+		add_action('init', array( $this, 'prevent_robots' ) );
 
 		add_filter( 'user_has_cap', array( $this, 'modify_user_capabilities' ), 10, 3 );
 
@@ -131,6 +137,14 @@ class Frame_Core
 
 		}
 
+
+	}
+
+	function prevent_robots() {
+
+		if ( !$this->is_live_env ) {
+			header( "X-Robots-Tag: noindex", true );
+		}
 
 	}
 
