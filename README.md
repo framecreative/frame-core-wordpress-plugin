@@ -65,6 +65,9 @@ Defines the email address that should be shown as the sender of the email.
 ### FC_SMTP_FROM_NAME ###
 Defines the name that should be shown as the sender of the email.
 
+### FC_GTM_ID ###
+Configures the ID for the Google Tag Manager account to be installed.
+
 ## Contributing and Extending ##
 
 We welcome PRs from within the Frame team, however please keep the following in mind when designing features
