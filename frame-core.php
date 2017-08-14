@@ -101,12 +101,14 @@ class Frame_Core
 	 */
 	function load_components()
 	{
+
 		require_once $this->dir . 'components/password-protect.php';
 		require_once $this->dir . 'components/env-tag.php';
 		require_once $this->dir . 'components/disable-emojis.php';
 		require_once $this->dir . 'components/proxy-uploads.php';
 		require_once $this->dir . 'components/smtp.php';
 		require_once $this->dir . 'components/helpers.php';
+		require_once $this->dir . 'components/google-tag-manager.php';
 
 		if ( is_admin() ) {
 			require_once $this->dir . 'components/disable-admin-nags.php';
@@ -117,6 +119,7 @@ class Frame_Core
 		new FC_Env_Tag();
 		new FC_Proxy_Uploads();
 		new FC_SMTP();
+		new FC_Google_Tag_Manager();
 
 	}
 
