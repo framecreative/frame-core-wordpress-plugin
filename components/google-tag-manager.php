@@ -10,7 +10,7 @@ class FC_Google_Tag_Manager {
 
 		if ( !$this->gtmID ) return;
 
-		add_action( 'wp_head', array( $this, 'install_gtm' ) );
+		add_action( 'wp_head', array( $this, 'install_gtm' ), 5 );
 		add_action( 'wp_footer', array( $this, 'install_gtm_noscript' ) );
 
 	}
