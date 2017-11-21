@@ -68,6 +68,9 @@ Defines the name that should be shown as the sender of the email.
 ### FC_GTM_ID ###
 Configures the ID for the Google Tag Manager account to be installed.
 
+### FC_CONTENT_FREEZE ###
+Activates a content freeze, only the Dev User will be able to login to the CMS.
+
 ## Contributing and Extending ##
 
 We welcome PRs from within the Frame team, however please keep the following in mind when designing features

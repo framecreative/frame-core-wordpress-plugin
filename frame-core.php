@@ -34,6 +34,8 @@ class Frame_Core
      */
     public $password_protect;
 
+    public $dev_user;
+
     public $is_dev_user;
 
     public $is_code_managed;
@@ -76,10 +78,10 @@ class Frame_Core
         }
 
 
-        $this->is_live_env = in_array(WP_ENV, [ 'live', 'production' ]);
-
+        $this->is_live_env        = in_array(WP_ENV, [ 'live', 'production' ]);
         $this->is_code_managed    = $this->get_configuration_value('FC_CODE_MANAGED', true);
         $this->is_site_maintained = $this->get_configuration_value('FC_SITE_MAINTAINED', false);
+        $this->dev_user           = $this->get_configuration_value('FC_DEV_USER', 'frame');
 
         add_action('init', [ $this, 'check_for_dev_user' ]);
 
@@ -109,6 +111,7 @@ class Frame_Core
         require_once $this->dir . 'components/smtp.php';
         require_once $this->dir . 'components/helpers.php';
         require_once $this->dir . 'components/google-tag-manager.php';
+        require_once $this->dir . 'components/content-freeze.php';
 
         if (is_admin()) {
             require_once $this->dir . 'components/disable-admin-nags.php';
@@ -120,6 +123,7 @@ class Frame_Core
         new FC_Proxy_Uploads();
         new FC_SMTP();
         new FC_Google_Tag_Manager();
+        new FC_Content_Freeze();
     }
 
     public function check_for_dev_user()
@@ -129,10 +133,7 @@ class Frame_Core
             // all are devs in the dev environment
             $this->is_dev_user = true;
         } else {
-            $current_user = wp_get_current_user();
-            $devUser = $this->get_configuration_value('FC_DEV_USER', 'frame');
-
-            $this->is_dev_user = ($devUser == $current_user->user_login);
+            $this->is_dev_user = ($this->dev_user == wp_get_current_user()->user_login);
         }
     }
 
@@ -150,16 +151,16 @@ class Frame_Core
         }
 
         if ($this->is_code_managed || $this->is_site_maintained) {
-            $allcaps['install_themes']  = false;
-            $allcaps['switch_themes']   = false;
+            $allcaps['install_themes'] = false;
+            $allcaps['switch_themes'] = false;
             $allcaps['install_plugins'] = false;
-            $allcaps['delete_plugins']  = false;
+            $allcaps['delete_plugins'] = false;
         }
 
         if ($this->is_site_maintained) {
             $allcaps['update_plugins'] = false;
-            $allcaps['update_core']    = false;
-            $allcaps['update_themes']  = false;
+            $allcaps['update_core'] = false;
+            $allcaps['update_themes'] = false;
         }
 
         return $allcaps;
@@ -173,13 +174,13 @@ class Frame_Core
 
         if ($this->is_code_managed || $this->is_site_maintained) {
             ?>
-            <div class="notice notice-warning">
-                <p>
-                    <strong>Plugin Installation Disabled</strong> - Dependencies for this site are version controlled.
-                    Please contact Frame to discuss new functionality so that the correct process can be followed.
-                </p>
-            </div>
-            <?php
+			<div class="notice notice-warning">
+				<p>
+					<strong>Plugin Installation Disabled</strong> - Dependencies for this site are version controlled.
+					Please contact Frame to discuss new functionality so that the correct process can be followed.
+				</p>
+			</div>
+			<?php
         }
     }
 
@@ -199,9 +200,9 @@ class Frame_Core
      */
     public function force_url()
     {
-        $forceDomain = $this->get_configuration_value('FC_FORCE_DOMAIN', false);
-        $forceSSL    = $this->get_configuration_value('FC_FORCE_SSL', false);
-        $preferSSL   = $this->get_configuration_value('FC_PREFER_SSL', false);
+        $forceDomain = 	$this->get_configuration_value('FC_FORCE_DOMAIN', false);
+        $forceSSL = 	$this->get_configuration_value('FC_FORCE_SSL', false);
+        $preferSSL = 	$this->get_configuration_value('FC_PREFER_SSL', false);
 
         if (! $forceDomain) {
             return;
