@@ -1,5 +1,23 @@
 # Changelog
 
+## Frame Core 1.0.14
+
+- Remove meta generators tags from wp_head
+- Hide yoast version when using premium
+
+## Frame Core 1.0.13
+
+- Implement content freeze feature
+- Implement Google Tag Manager configuration
+
+## Frame Core 1.0.12
+
+- Prevent search engines if not a live environment
+
+## Frame Core 1.0.11
+
+- Disable WC CBA Admin nag
+
 ## Frame Core 1.0.10
 
 - added FC_CODE_MANAGED - constant defaults true, Disables plugin installation and displays a notice*
