@@ -93,6 +93,7 @@ class Frame_Core
 
         add_action('template_redirect', [ $this, 'force_url']);
 
+        $this->remove_headers();
         $this->load_components();
     }
 
@@ -245,6 +246,12 @@ class Frame_Core
         }
     }
 
+    public function remove_headers()
+    {
+        remove_action('wp_head', 'wp_generator');
+        // Hides version of Yoast if premium
+        add_filter('wpseo_hide_version', '__return_true');
+    }
 
     /**
      * @return Frame_Core
