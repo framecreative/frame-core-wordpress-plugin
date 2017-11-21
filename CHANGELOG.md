@@ -1,5 +1,10 @@
 # Changelog
 
+## Frame Core 1.1.0
+
+- Implement content freeze feature
+- Increased GTM tag priority
+
 ## Frame Core 1.0.14
 
 - Remove meta generators tags from wp_head
@@ -7,7 +12,6 @@
 
 ## Frame Core 1.0.13
 
-- Implement content freeze feature
 - Implement Google Tag Manager configuration
 
 ## Frame Core 1.0.12
