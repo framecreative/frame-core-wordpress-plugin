@@ -18,6 +18,96 @@ Or variables set int the `.env` file of the project. This is preferred.
 FC_PASSWORD_PROTECT_PASSWORD=1234
 ```
 
+## Sample .env values ##
+```
+#
+# ALL VALUES IN .ENV ARE STRINGS
+# "true" / "false" will be converted to their boolean equivalents
+#
+
+
+# ==============================================================================
+# PRODUCTION TOOLS - CODE MANAGEMENT
+# ==============================================================================
+
+# values  : true | false
+# default : false
+FC_CODE_MANAGED=""
+
+# values  : true | false
+# default : false
+FC_SITE_MAINTAINED=""
+
+# values  : string (username)
+# default : 'frame'
+FC_DEV_USER=""
+
+# ==============================================================================
+# DOMAIN TOOLS - HTTPS, FORCE DOMAIN
+# ==============================================================================
+
+# On Frame hosting this is mostly done via serverpilot/cloudflare
+
+# values  : string (fully qualified domain name)
+# default : false / empty string
+FC_FORCE_DOMAIN=""
+
+# values  : true | false
+# default : false
+FC_FORCE_SSL=""
+
+# values  : true | false
+# default : false
+FC_PREFER_SSL=""
+
+
+# ==============================================================================
+# DEV TOOLS - PASSWORDS, PROXY
+# ==============================================================================
+
+# Proxy uploads doesn't work with Laravel Valet WordPress Driver
+
+# values  : string (password)
+# default : false / empty string
+FC_PASSWORD_PROTECT_PASSWORD=""
+
+# values  : string (url of remote site's uploads dir, no trailing slash)
+# default : false / empty string
+FC_PROXY_UPLOADS_URL=""
+
+# values  : true | false
+# default : false / empty string
+FC_PROXY_DISPLAY_ONLY=""
+
+
+# ==============================================================================
+# PRODUCTION TOOLS - CONTENT FREEZE, TAG MANAGER
+# ==============================================================================
+
+# values  : true | false
+# default : false / empty string
+FC_CONTENT_FREEZE=""
+
+# values  : string (google tag manager container id)
+# default : false / empty string
+FC_GTM_ID=""
+
+
+# ==============================================================================
+# MAIL
+# ==============================================================================
+
+# values  : string (smtp details)
+# default : false / empty string
+FC_SMTP_USER=""
+FC_SMTP_PASSWORD=""
+FC_SMTP_PORT=""
+FC_SMTP_FROM=""
+FC_SMTP_FROM_NAME=""
+
+
+```
+
 ## Available Features ##
 
 ### FC_CODE_MANAGED ###
@@ -27,7 +117,7 @@ Defines that the codebase and dependencies are being managed externally (e.g. in
 Should be enabled if we have an agreement to maintain the site. This will not only disable installing new plugins but also plugin and core updates, as well as their notifications. This defaults to false.
 
 ### FC_DEV_USER ###
-Defines the username of the dev user which will be immune to admin restricts. This user is able to install and update plugins at all times and will be able to edit ACF Field Groups. Defaults to 'frame'. 
+Defines the username of the dev user which will be immune to admin restricts. This user is able to install and update plugins at all times and will be able to edit ACF Field Groups. Defaults to 'frame'.
 
 ### FC_FORCE_DOMAIN ###
 Defines the domain that the site should be loaded on. Will redirect to this domain if accessed via another.
