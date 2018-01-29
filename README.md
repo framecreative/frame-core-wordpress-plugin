@@ -99,6 +99,7 @@ FC_GTM_ID=""
 
 # values  : string (smtp details)
 # default : false / empty string
+FC_SMTP_HOST=""
 FC_SMTP_USER=""
 FC_SMTP_PASSWORD=""
 FC_SMTP_PORT=""
