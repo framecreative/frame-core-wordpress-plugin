@@ -28,10 +28,10 @@ So the client can't change our beautiful custom fields.
 ### Plugin, Theme, Wordpress Core changes are disabled
 
 The following general user restrictions are set:
-* Disable installing and deleting plugins
-* Disable installing and switching themes
-* Add a 'Plugin Installation Disabled' notification in the admin 
-* **Users will be able to update plugins, themes and Wordpress core**
+- Disable installing and deleting plugins
+- Disable installing and switching themes
+- Add a 'Plugin Installation Disabled' notification in the admin 
+- **Users will be able to update plugins, themes and Wordpress core**
 
 Set this to `false` if the hand-over has no agreements in place to manage the code.
 ```
@@ -49,9 +49,9 @@ Set as `true` if we have an agreement to maintain the website (perform updates, 
 FC_SITE_MAINTAINED="true"
 ```
 If set to `true` this will:
-* Disable installing, deleting and updating plugins (including Wordpress)
-* Disable installing and switching themes
-* Add a 'Plugin Installation Disabled' notification in the admin 
+- Disable installing, deleting and updating plugins (including Wordpress)
+- Disable installing and switching themes
+- Add a 'Plugin Installation Disabled' notification in the admin 
 
 ### Set a custom Frame admin username
 This defines the username of the dev user which will be immune to admin restricts. This user is able to install and update plugins at all times and will be able to edit ACF Field Groups.
