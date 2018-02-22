@@ -11,7 +11,8 @@ class FC_Google_Tag_Manager {
 		if ( !$this->gtmID ) return;
 
 		add_action( 'wp_head', array( $this, 'install_gtm' ), 5 );
-		add_action( 'wp_footer', array( $this, 'install_gtm_noscript' ) );
+		add_action( 'frame_body_open', array( $this, 'install_gtm_noscript') );
+		add_action( 'wp_footer', array( $this, 'check_gtm_noscript' ) );
 
 	}
 
@@ -37,6 +38,13 @@ class FC_Google_Tag_Manager {
 		<!-- End Google Tag Manager (noscript) -->
 
 	<?php
+	}
+
+	function check_gtm_noscript(){
+
+		if ( did_action( 'frame_body_open' ) > 0 ) return;
+
+		$this->install_gtm_noscript();
 	}
 
 }
