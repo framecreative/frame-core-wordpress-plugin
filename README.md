@@ -112,9 +112,12 @@ On Frame hosting these settings are mostly performed in Serverpilot / Cloudflare
 ```
 # Defines the domain that the site should be loaded on.
 # Will redirect to this domain if accessed via another.
+# Because of the logic of force SSL etc this domain wshould be without protocol or slashes
+# eg: "mysite.com"
+# Note: Required for FORCE_SSL to work
 
 FC_FORCE_DOMAIN=""
-# values: string (fully qualified domain name)
+# values: string (fully qualified domain name, without slashes or protocal)
 # default: false / empty string
 ```
 ```
