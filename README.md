@@ -266,4 +266,12 @@ FC_SMTP_PASSWORD=""
 FC_SMTP_PORT=""
 FC_SMTP_FROM=""
 FC_SMTP_FROM_NAME=""
+
+# Sample values for Shared mailtrap account
+# FC_SMTP_HOST="smtp.mailtrap.io"
+# FC_SMTP_USER="b0691b59004c8e"
+# FC_SMTP_PASSWORD="0c2f40265e95e1"
+# FC_SMTP_PORT="2525"
+
+
 ```
