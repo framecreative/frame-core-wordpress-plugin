@@ -19,13 +19,20 @@ class FC_Conditional_Plugin_Loading {
 	protected $env;
 
 	/**
+	 * @var array
+	 */
+	protected $deactivated = [];
+
+	/**
 	 * FC_Conditional_Plugin_Loading constructor.
 	 */
 	public function __construct() {
 
-		add_filter( 'option_active_plugins', [ $this, 'load_plugins' ];
+		add_filter( 'option_active_plugins', [ $this, 'load_plugins' ] );
 
 		add_filter('option_active_plugins', [ $this, 'lazy_init_values'], 1 );
+
+		add_filter( 'plugin_row_meta', [ $this, 'notice_for_plugin_table'], 30, 4 );
 
 		$this->env = FC()->get_current_environment();
 
@@ -93,6 +100,8 @@ class FC_Conditional_Plugin_Loading {
 
 	public function load_plugins( $plugins ){
 
+		$rules = $this->rules;
+
 		$activate = ( ! empty( $rules[ 'on_' . $this->env ] ) ) ? $rules[ 'on_' . $this->env ] : [];
 
 		$deactivate = ( ! empty( $rules[ 'not_' . $this->env ] ) ) ? $rules[ 'not_' . $this->env ] : [];
@@ -101,7 +110,7 @@ class FC_Conditional_Plugin_Loading {
 
 		foreach( $deactivate as $plugin_to_deactivate ){
 
-			$folder_name = $this->get_folder_name( $plugins );
+			$folder_name = $this->get_folder_name( $plugin_to_deactivate );
 
 			/*
 			 * This allows us to bail on a per plugin basis using the env file, good for quick testing
@@ -115,7 +124,9 @@ class FC_Conditional_Plugin_Loading {
 
 			if ( ! $key ) continue;
 
-			unset( $key, $plugins );
+			unset( $plugins[ $key ] );
+
+			$this->deactivated[] = $plugin_to_deactivate;
 
 		}
 
@@ -124,6 +135,15 @@ class FC_Conditional_Plugin_Loading {
 
 		return $plugins;
 
+	}
+
+	function notice_for_plugin_table( $meta, $file, $data, $status ){
+
+		if ( false === array_search( $file, $this->deactivated ) ) return $meta;
+
+		$meta[] = '<span style="font-family: monospace; padding: 4px 2px; background-color: #f14242; color: #ffffff;">Plugin deactivated in "' . WP_ENV . '" by Frame Core</span>';
+
+		return $meta;
 	}
 
 
