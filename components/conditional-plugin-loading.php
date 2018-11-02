@@ -72,11 +72,11 @@ class FC_Conditional_Plugin_Loading {
 		$conditions['not_dev'] = [
 			'simple-login-log/simple-login-log.php',
 			'wordfence/wordfence.php',
-			'wordpress-seo/wp-seo.php',
 			'mailgun/mailgun.php',
 			'wp-security-audit-log/wp-security-adit-log.php',
 			'sparkpost/wordpress-spark-post.php',
 			'worker/init.php',
+			'sendgrid-email-delivery-simplified/wpsendgrid.php',
 			'mailchimp-for-woocommerce/mailchimp-woocommerce.php',
 			'efinterface/efinterface.php'
 		];
