@@ -41,6 +41,9 @@ class FC_Disable_Admin_Nags {
 
   public function __construct() {
       add_action( 'admin_notices', [ $this, 'remove_extensionworks_activation_notice'], 1);
+
+      add_filter( 'woocommerce_helper_suppress_connect_notice', '__return_true' );
+
   }
 
   public function remove_extensionworks_activation_notice(){

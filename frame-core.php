@@ -3,7 +3,7 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 1.1.1
+Version: 1.2.0
 Author: Frame
 Author URI: http://framecreative.com.au
 Description: Designed to run with a fairly specific git workflow and wp-config.php
@@ -78,7 +78,7 @@ class Frame_Core
         }
 
 
-        $this->is_live_env        = in_array(WP_ENV, [ 'live', 'production' ]);
+        $this->is_live_env        = ( $this->get_current_environment() === 'live' );
         $this->is_code_managed    = $this->get_configuration_value('FC_CODE_MANAGED', true);
         $this->is_site_maintained = $this->get_configuration_value('FC_SITE_MAINTAINED', false);
         $this->dev_user           = $this->get_configuration_value('FC_DEV_USER', 'frame');
@@ -112,8 +112,9 @@ class Frame_Core
         require_once $this->dir . 'components/helpers.php';
         require_once $this->dir . 'components/google-tag-manager.php';
         require_once $this->dir . 'components/content-freeze.php';
+        require_once $this->dir . 'components/conditional-plugin-loading.php';
 
-        if (is_admin()) {
+        if (is_admin() ) {
             require_once $this->dir . 'components/disable-admin-nags.php';
             new FC_Disable_Admin_Nags();
         }
@@ -124,6 +125,8 @@ class Frame_Core
         new FC_SMTP();
         new FC_Google_Tag_Manager();
         new FC_Content_Freeze();
+
+        new FC_Conditional_Plugin_Loading();
     }
 
     public function check_for_dev_user()
@@ -253,6 +256,35 @@ class Frame_Core
         // Hides version of Yoast if premium
         add_filter('wpseo_hide_version', '__return_true');
     }
+
+	/**
+	 * Get's the env and allows for some flexibility
+	 *
+	 * @return string|null
+	 */
+	public function get_current_environment(){
+
+		if ( ! defined( 'WP_ENV') ){
+			define( 'WP_ENV', $this->get_configuration_value( 'WP_ENV', null ) );
+		}
+
+		/* Synonyms for the 3 ENV we use */
+		$env_names = [
+			'dev'        => 'dev',
+			'staging'    => 'staging',
+			'uat'        => 'staging',
+			'feature'    => 'staging',
+			'live'       => 'live',
+			'production' => 'live',
+        ];
+
+		$env_names = apply_filters( 'frame/core/env_names', $env_names, $this );
+
+		if ( array_key_exists( WP_ENV, $env_names) ) return $env_names[ WP_ENV ];
+
+		return WP_ENV;
+
+	}
 
     /**
      * @return Frame_Core
