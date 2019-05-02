@@ -1,5 +1,13 @@
 # Changelog
 
+## Frame Core 1.3.0
+- Added common mail /SMPT plugins to staging deactivate list
+
+## Frame Core 1.2.0
+- Conditional plugin loading
+- Changes to how we detect environments (they are normalised now)
+
+
 ## Frame Core 1.1.0
 
 - Implement content freeze feature

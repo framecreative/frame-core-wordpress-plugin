@@ -3,7 +3,7 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 1.2.1
+Version: 1.3.0
 Author: Frame
 Author URI: http://framecreative.com.au
 Description: Designed to run with a fairly specific git workflow and wp-config.php
