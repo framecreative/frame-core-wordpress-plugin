@@ -81,6 +81,17 @@ class FC_Conditional_Plugin_Loading {
 			'efinterface/efinterface.php'
 		];
 
+		$conditions['not_staging'] = [
+			'wordfence/wordfence.php',
+			'mailgun/mailgun.php',
+			'wp-security-audit-log/wp-security-adit-log.php',
+			'sparkpost/wordpress-spark-post.php',
+			'worker/init.php',
+			'sendgrid-email-delivery-simplified/wpsendgrid.php',
+			'mailchimp-for-woocommerce/mailchimp-woocommerce.php',
+			'efinterface/efinterface.php'
+		];
+
 		return apply_filters( 'frame/core/conditional_plugin_loading_rules', $conditions, $this );
 
 	}
