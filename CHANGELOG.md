@@ -1,5 +1,8 @@
 # Changelog
 
+## Frame Core 1.3.1
+- Added multisite support to plugin deactivate list
+
 ## Frame Core 1.3.0
 - Added common mail /SMPT plugins to staging deactivate list
 

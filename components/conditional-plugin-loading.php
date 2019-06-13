@@ -28,9 +28,11 @@ class FC_Conditional_Plugin_Loading {
 	 */
 	public function __construct() {
 
-		add_filter( 'option_active_plugins', [ $this, 'load_plugins' ] );
+        add_filter('option_active_plugins', [ $this, 'lazy_init_values'], 1 );
+        add_filter( 'site_option_active_sitewide_plugins', [ $this, 'lazy_init_values' ], 1 );
 
-		add_filter('option_active_plugins', [ $this, 'lazy_init_values'], 1 );
+		add_filter( 'option_active_plugins', [ $this, 'load_plugins' ] );
+        add_filter( 'site_option_active_sitewide_plugins', [ $this, 'network_load_plugins' ] );
 
 		add_filter( 'plugin_row_meta', [ $this, 'notice_for_plugin_table'], 30, 4 );
 
@@ -107,29 +109,33 @@ class FC_Conditional_Plugin_Loading {
 		return isset( $bits[0] ) ? (string)$bits[0] : null;
 	}
 
+    public function network_load_plugins( $plugins ){
 
+        $deactivate = $this->get_deactivations();
+
+        foreach( $deactivate as $plugin_to_deactivate ){
+
+            if ( !array_key_exists( $plugin_to_deactivate, $plugins ) ) continue;
+
+            unset( $plugins[$plugin_to_deactivate] );
+
+            $this->deactivated[] = $plugin_to_deactivate;
+
+        }
+
+        return $plugins;
+
+    }
 
 	public function load_plugins( $plugins ){
 
-		$rules = $this->rules;
+		$activate = $this->get_activations();
 
-		$activate = ( ! empty( $rules[ 'on_' . $this->env ] ) ) ? $rules[ 'on_' . $this->env ] : [];
-
-		$deactivate = ( ! empty( $rules[ 'not_' . $this->env ] ) ) ? $rules[ 'not_' . $this->env ] : [];
+		$deactivate = $this->get_deactivations();
 
 		$plugins = array_merge( $plugins, $activate );
 
 		foreach( $deactivate as $plugin_to_deactivate ){
-
-			$folder_name = $this->get_folder_name( $plugin_to_deactivate );
-
-			/*
-			 * This allows us to bail on a per plugin basis using the env file, good for quick testing
-			 *
-			 * EG: FC_ACTIVATE_MAILGUN="true"
-			 * Only works to STOP deactivating plugins
-			 */
-			if ( FC()->get_configuration_value( 'FC_ACTIVATE_' . strtoupper( $folder_name), false ) ) continue;
 
 			$key = array_search( $plugin_to_deactivate, $plugins );
 
@@ -157,6 +163,41 @@ class FC_Conditional_Plugin_Loading {
 		return $meta;
 	}
 
+	function get_deactivations() {
+
+        $rules = $this->rules;
+
+        $deactivate = ( ! empty( $rules[ 'not_' . $this->env ] ) ) ? $rules[ 'not_' . $this->env ] : [];
+
+        foreach( $deactivate as $index => $plugin_to_deactivate ){
+
+            $folder_name = $this->get_folder_name( $plugin_to_deactivate );
+
+            if ( FC()->get_configuration_value( 'FC_ACTIVATE_' . strtoupper( $folder_name), false ) )
+               unset( $deactivate[$index] );
+
+            /*
+			 * This allows us to bail on a per plugin basis using the env file, good for quick testing
+			 *
+			 * EG: FC_ACTIVATE_MAILGUN="true"
+			 * Only works to STOP deactivating plugins
+			 */
+
+        }
+
+        return $deactivate;
+
+    }
+
+    function get_activations() {
+
+        $rules = $this->rules;
+
+        $activate = ( ! empty( $rules[ 'on_' . $this->env ] ) ) ? $rules[ 'on_' . $this->env ] : [];
+
+        return $activate;
+
+    }
 
 
 }
