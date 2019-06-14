@@ -1,5 +1,8 @@
 # Changelog
 
+## Frame Core 1.4.0
+- Simplified plugin deactivate list to accept and folder names and removed activation functionality
+
 ## Frame Core 1.3.1
 - Added multisite support to plugin deactivate list
 

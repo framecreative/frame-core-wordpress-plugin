@@ -63,35 +63,38 @@ class FC_Conditional_Plugin_Loading {
 	protected function setInitialRules(){
 
 		$conditions = [
-			'on_live' => [],
-			'on_staging' => [],
-			'on_dev' => [],
 			'not_live' => [],
 			'not_staging' => [],
 			'not_dev' => [],
 		];
 
 		$conditions['not_dev'] = [
-			'simple-login-log/simple-login-log.php',
-			'wordfence/wordfence.php',
-			'mailgun/mailgun.php',
-			'wp-security-audit-log/wp-security-adit-log.php',
-			'sparkpost/wordpress-spark-post.php',
-			'worker/init.php',
-			'sendgrid-email-delivery-simplified/wpsendgrid.php',
-			'mailchimp-for-woocommerce/mailchimp-woocommerce.php',
-			'efinterface/efinterface.php'
+			'simple-login-log',
+			'wordfence',
+			'mailgun',
+			'wp-security-audit-log',
+			'sparkpost',
+			'worker',
+			'sendgrid-email-delivery-simplified',
+			'mailchimp-for-woocommerce',
+			'efinterface',
+            'wp-mail-smtp',
+            'woocommerce-product-feeds',
+            'facebook-for-woocommerce'
 		];
 
 		$conditions['not_staging'] = [
-			'wordfence/wordfence.php',
-			'mailgun/mailgun.php',
-			'wp-security-audit-log/wp-security-adit-log.php',
-			'sparkpost/wordpress-spark-post.php',
-			'worker/init.php',
-			'sendgrid-email-delivery-simplified/wpsendgrid.php',
-			'mailchimp-for-woocommerce/mailchimp-woocommerce.php',
-			'efinterface/efinterface.php'
+			'wordfence',
+			'mailgun',
+			'wp-security-audit-log',
+			'sparkpost',
+			'worker',
+			'sendgrid-email-delivery-simplified',
+			'mailchimp-for-woocommerce',
+			'efinterface',
+            'wp-mail-smtp',
+            'woocommerce-product-feeds',
+            'facebook-for-woocommerce'
 		];
 
 		return apply_filters( 'frame/core/conditional_plugin_loading_rules', $conditions, $this );
@@ -113,13 +116,14 @@ class FC_Conditional_Plugin_Loading {
 
         $deactivate = $this->get_deactivations();
 
-        foreach( $deactivate as $plugin_to_deactivate ){
+        foreach ( array_keys($plugins) as $plugin_path ) {
 
-            if ( !array_key_exists( $plugin_to_deactivate, $plugins ) ) continue;
+            if ( !in_array( $this->get_folder_name( $plugin_path ), $deactivate ) )
+                continue;
 
-            unset( $plugins[$plugin_to_deactivate] );
+            unset( $plugins[$plugin_path] );
 
-            $this->deactivated[] = $plugin_to_deactivate;
+            $this->deactivated[] = $plugin_path;
 
         }
 
@@ -129,26 +133,18 @@ class FC_Conditional_Plugin_Loading {
 
 	public function load_plugins( $plugins ){
 
-		$activate = $this->get_activations();
-
 		$deactivate = $this->get_deactivations();
 
-		$plugins = array_merge( $plugins, $activate );
+		foreach ( $plugins as $index => $plugin_path ) {
 
-		foreach( $deactivate as $plugin_to_deactivate ){
+            if ( !in_array( $this->get_folder_name( $plugin_path ), $deactivate ) )
+                continue;
 
-			$key = array_search( $plugin_to_deactivate, $plugins );
+            unset( $plugins[$index] );
 
-			if ( ! $key ) continue;
+            $this->deactivated[] = $plugin_path;
 
-			unset( $plugins[ $key ] );
-
-			$this->deactivated[] = $plugin_to_deactivate;
-
-		}
-
-		// In case we've added plugins that were already active
-		$plugins = array_unique( $plugins );
+        }
 
 		return $plugins;
 
@@ -173,9 +169,6 @@ class FC_Conditional_Plugin_Loading {
 
             $folder_name = $this->get_folder_name( $plugin_to_deactivate );
 
-            if ( FC()->get_configuration_value( 'FC_ACTIVATE_' . strtoupper( $folder_name), false ) )
-               unset( $deactivate[$index] );
-
             /*
 			 * This allows us to bail on a per plugin basis using the env file, good for quick testing
 			 *
@@ -183,19 +176,15 @@ class FC_Conditional_Plugin_Loading {
 			 * Only works to STOP deactivating plugins
 			 */
 
+            if ( FC()->get_configuration_value( 'FC_ACTIVATE_' . strtoupper( $folder_name), false ) ) {
+                unset($deactivate[$index]);
+            } else {
+                $deactivate[$index] = $folder_name;
+            }
+
         }
 
         return $deactivate;
-
-    }
-
-    function get_activations() {
-
-        $rules = $this->rules;
-
-        $activate = ( ! empty( $rules[ 'on_' . $this->env ] ) ) ? $rules[ 'on_' . $this->env ] : [];
-
-        return $activate;
 
     }
 
