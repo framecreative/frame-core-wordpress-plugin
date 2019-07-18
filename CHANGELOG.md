@@ -1,5 +1,8 @@
 # Changelog
 
+## Frame Core 1.5.0
+- Added author enum protection
+
 ## Frame Core 1.4.0
 - Simplified plugin deactivate list to accept and folder names and removed activation functionality
 

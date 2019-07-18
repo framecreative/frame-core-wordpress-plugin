@@ -94,13 +94,15 @@ class Frame_Core
         add_action('admin_menu', [ $this,'admin_remove_menu_pages'], 999);
 
         add_action('template_redirect', [ $this, 'force_url']);
-        
+
         add_action('customize_register', [$this, 'prefix_remove_css_section'], 15);
+
+        add_filter('redirect_canonical', [$this, 'prevent_author_enum'], 10, 2 );
 
         $this->remove_headers();
         $this->load_components();
     }
-    
+
     // Remove the additional CSS section
     public function prefix_remove_css_section($wp_customize) {
         $wp_customize->remove_section('custom_css');
@@ -292,6 +294,18 @@ class Frame_Core
 		return WP_ENV;
 
 	}
+
+    public function prevent_author_enum( $redirect, $request ) {
+
+        if ( is_admin() )
+            return $redirect;
+
+        if ( preg_match('/\?author=([0-9]*)(\/*)/i', $request) )
+            return false;
+
+        return $redirect;
+
+    }
 
     /**
      * @return Frame_Core
