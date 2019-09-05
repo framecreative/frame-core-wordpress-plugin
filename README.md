@@ -251,6 +251,7 @@ FC_CONTENT_FREEZE=""
 
 # values  : string (google tag manager container id)
 # default : false / empty string
+# For Multisite, add blog ID after env variable eg FC_GTM_ID_2. This will override the default FC_GTM_ID if set
 FC_GTM_ID=""
 
 

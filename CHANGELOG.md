@@ -1,5 +1,8 @@
 # Changelog
 
+## Frame Core 1.6.0
+- Added multisite functionality for Google Tag Manager
+
 ## Frame Core 1.5.0
 - Added author enum protection
 

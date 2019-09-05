@@ -6,7 +6,11 @@ class FC_Google_Tag_Manager {
 
 	function __construct() {
 
-		 $this->gtmID = FC()->get_configuration_value('FC_GTM_ID');
+		if ( is_multisite() )
+			$this->gtmID = FC()->get_configuration_value('FC_GTM_ID_' . get_current_blog_id() );
+
+		if ( !$this->gtmID )
+			$this->gtmID = FC()->get_configuration_value('FC_GTM_ID');
 
 		if ( !$this->gtmID ) return;
 
