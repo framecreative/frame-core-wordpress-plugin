@@ -1,5 +1,9 @@
 # Changelog
 
+## Frame Core 1.7.0
+- Add login screen helper, to improve the client experience.
+- Include theme support check so that we can easily register custom login styles
+
 ## Frame Core 1.6.0
 - Added multisite functionality for Google Tag Manager
 

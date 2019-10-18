@@ -3,10 +3,10 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 1.6.0
+Version: 1.7.0
 Author: Frame
 Author URI: http://framecreative.com.au
-Description: Designed to run with a fairly specific git workflow and wp-config.php
+Description: Tools & Helpers to take WordPress to the next level. Works best on Frame Servers, and in projects built using Frame's WP-Boilerplate.
 
 Bitbucket Plugin URI: https://bitbucket.org/framecreative/frame-core
 Bitbucket Branch: master
@@ -122,6 +122,7 @@ class Frame_Core
         require_once $this->dir . 'components/google-tag-manager.php';
         require_once $this->dir . 'components/content-freeze.php';
         require_once $this->dir . 'components/conditional-plugin-loading.php';
+        require_once $this->dir . 'components/login-screen.php';
 
         if (is_admin() ) {
             require_once $this->dir . 'components/disable-admin-nags.php';
@@ -134,7 +135,7 @@ class Frame_Core
         new FC_SMTP();
         new FC_Google_Tag_Manager();
         new FC_Content_Freeze();
-
+		new FC_Login_Screen();
         new FC_Conditional_Plugin_Loading();
     }
 
