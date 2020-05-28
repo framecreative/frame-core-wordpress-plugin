@@ -1,5 +1,12 @@
 # Changelog
 
+## Frame Core 1.8.0
+- Use the `send_headers` action to send our `no-follow` headers on staging
+- Add URL based staging detection for the noindex function, to prevent mistakes
+
+####Url based Staging Detection
+If you are using a custom staging domain (not frmdv.com or frame.hosting) then you can add the custom domain via the `frame/core/staging_domains` filter.
+
 ## Frame Core 1.7.0
 - Add login screen helper, to improve the client experience.
 - Include theme support check so that we can easily register custom login styles
