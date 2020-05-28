@@ -85,7 +85,7 @@ class Frame_Core
 
         add_action('init', [ $this, 'check_for_dev_user' ]);
 
-        add_action('init', [ $this, 'prevent_robots' ]);
+        add_action('send_headers', [ $this, 'prevent_robots' ]);
 
         add_filter('user_has_cap', [ $this, 'modify_user_capabilities' ], 10, 3);
 
@@ -152,9 +152,8 @@ class Frame_Core
 
     public function prevent_robots()
     {
-        if (!$this->is_live_env) {
-            header("X-Robots-Tag: noindex", true);
-        }
+		if ( $this->is_live_env && ! self::is_staging_domain() ) return;
+		header("X-Robots-Tag: noindex", true);
     }
 
     public function modify_user_capabilities($allcaps)
@@ -293,6 +292,19 @@ class Frame_Core
 		if ( array_key_exists( WP_ENV, $env_names) ) return $env_names[ WP_ENV ];
 
 		return WP_ENV;
+
+	}
+
+	static function is_staging_domain(){
+
+		$staging_domains = apply_filters( 'frame/core/staging_domains', [ 'frmdv.com, frame.hosting' ] );
+
+		$httpHost = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+
+		if ( ! $httpHost ) return false;
+
+		return !!stristr( join( ' ', $staging_domains ), $httpHost );
+
 
 	}
 
