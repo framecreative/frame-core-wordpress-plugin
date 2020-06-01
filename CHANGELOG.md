@@ -1,5 +1,9 @@
 # Changelog
 
+## Frame Core 1.9.0
+- Disabled site health dashboard widget by default.
+- Configuration options to re-enable dashboard widget or disable site health page completely.
+
 ## Frame Core 1.8.0
 - Use the `send_headers` action to send our `no-follow` headers on staging
 - Add URL based staging detection for the noindex function, to prevent mistakes
