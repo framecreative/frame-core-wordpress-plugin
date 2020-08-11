@@ -3,7 +3,7 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 1.9.0
+Version: 1.10.0
 Author: Frame
 Author URI: http://framecreative.com.au
 Description: Tools & Helpers to take WordPress to the next level. Works best on Frame Servers, and in projects built using Frame's WP-Boilerplate.
@@ -78,14 +78,14 @@ class Frame_Core
         }
 
 
-        $this->is_live_env        = ( $this->get_current_environment() === 'live' );
-        $this->is_code_managed    = $this->get_configuration_value('FC_CODE_MANAGED', true);
-        $this->is_site_maintained = $this->get_configuration_value('FC_SITE_MAINTAINED', false);
-        $this->dev_user           = $this->get_configuration_value('FC_DEV_USER', 'frame');
+        $this->is_live_env        = ( self::env() === 'live' );
+        $this->is_code_managed    = self::config('FC_CODE_MANAGED', true);
+        $this->is_site_maintained = self::config('FC_SITE_MAINTAINED', false);
+        $this->dev_user           = self::config('FC_DEV_USER', 'frame');
 
-        add_action('init', [ $this, 'check_for_dev_user' ]);
+        add_action('init', [ $this, 'check_for_dev_user' ] );
 
-        add_action('send_headers', [ $this, 'prevent_robots' ]);
+        add_action('init', [ $this, 'prevent_robots' ] );
 
         add_filter('user_has_cap', [ $this, 'modify_user_capabilities' ], 10, 3);
 
@@ -125,7 +125,7 @@ class Frame_Core
         require_once $this->dir . 'components/login-screen.php';
         require_once $this->dir . 'components/hide-site-health.php';
 
-        if (is_admin() ) {
+        if ( is_admin() ) {
             require_once $this->dir . 'components/disable-admin-nags.php';
             new FC_Disable_Admin_Nags();
         }
@@ -156,7 +156,15 @@ class Frame_Core
     public function prevent_robots()
     {
 		if ( $this->is_live_env && ! self::is_staging_domain() ) return;
-		header("X-Robots-Tag: noindex", true);
+
+		add_action( 'send_headers', function(){
+			header("X-Robots-Tag: noindex", true);
+		} );
+
+		add_action( 'wp_head', function(){
+			echo '<!-- NoIndex Added by Frame Core MU Plugin -->';
+			echo '<meta name="robots" content="noindex">';
+		}, 99 );
     }
 
     public function modify_user_capabilities($allcaps)
@@ -239,13 +247,33 @@ class Frame_Core
     }
 
     /**
-     * Checks for value as constant and then as environment variable
+     * Left for backwards compatibility, use FrameCore::config()
+	 * @deprecated 1.10.0
+	 *
      * */
     public function get_configuration_value($name, $default = null)
-    {
+	{
+		return self::config( $name, $default );
+	}
+
+	/**
+	 * Get a configuration value from a constant or .env file
+	 *
+	 * New static method for better flexibility
+	 *
+	 * @since 1.10.0
+	 * @param string $name
+	 * @param string|int|bool|null $default
+	 * @return string|int|bool|null
+	 */
+	public static function config( $name, $default = null )
+	{
+
         if (defined($name)) {
             return constant($name);
-        } elseif ($envValue = getenv($name)) {
+		}
+
+		if ($envValue = getenv($name)) {
             switch ($envValue) {
                 case 'true':
                     return true;
@@ -255,12 +283,12 @@ class Frame_Core
 
                 default:
                     return $envValue;
-
             }
-        } else {
-            return $default;
-        }
-    }
+		}
+
+        return $default;
+
+	}
 
     public function remove_headers()
     {
@@ -271,18 +299,32 @@ class Frame_Core
 
 	/**
 	 * Get's the env and allows for some flexibility
-	 *
+	 * @deprecated 1.10.0
 	 * @return string|null
 	 */
 	public function get_current_environment(){
+		return self::env();
+	}
+
+	/**
+	 * Get's the env and allows for some flexibility
+	 *
+	 *  New Static Method, allows for mre use in other places.
+	 *
+	 * @since 1.10.0
+	 * @return string|null
+	 */
+	public static function env(){
 
 		if ( ! defined( 'WP_ENV') ){
-			define( 'WP_ENV', $this->get_configuration_value( 'WP_ENV', null ) );
+			$environment = self::config( 'WP_ENV', null );
+			define( 'WP_ENV', $environment );
 		}
 
 		/* Synonyms for the 3 ENV we use */
 		$env_names = [
 			'dev'        => 'dev',
+			'local'        => 'dev',
 			'staging'    => 'staging',
 			'uat'        => 'staging',
 			'feature'    => 'staging',
@@ -290,25 +332,29 @@ class Frame_Core
 			'production' => 'live',
         ];
 
-		$env_names = apply_filters( 'frame/core/env_names', $env_names, $this );
+		$env_names = apply_filters( 'frame/core/env_names', $env_names );
 
 		if ( array_key_exists( WP_ENV, $env_names) ) return $env_names[ WP_ENV ];
 
 		return WP_ENV;
-
 	}
 
 	static function is_staging_domain(){
 
 		$staging_domains = apply_filters( 'frame/core/staging_domains', [ 'frmdv.com, frame.hosting' ] );
+		$staging_prefixes = apply_filters( 'frame/core/staging_prefixes', [ 'dev', 'staging', 'uat', ] );
 
 		$httpHost = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
 
 		if ( ! $httpHost ) return false;
 
-		return !!stristr( join( ' ', $staging_domains ), $httpHost );
+		if ( stristr( join( ' ', $staging_domains), $httpHost ) ) return true;
 
+		$domain_pieces = (array) explode( '.', $httpHost );
 
+		if ( empty( $domain_pieces ) ) return false;
+
+		return !! array_search( $domain_pieces[0], $staging_prefixes );
 	}
 
     public function prevent_author_enum( $redirect, $request ) {
