@@ -121,6 +121,10 @@ class FC_Password_Protected
 			return;
 		}
 
+		if ( is_robots() ) {
+		    return;
+        }
+
 		// Show login form
 		if ( isset( $_REQUEST['password-protected'] ) && 'login' == $_REQUEST['password-protected'] )
 		{
