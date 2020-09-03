@@ -3,7 +3,7 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 1.10.0
+Version: 1.11.0
 Author: Frame
 Author URI: http://framecreative.com.au
 Description: Tools & Helpers to take WordPress to the next level. Works best on Frame Servers, and in projects built using Frame's WP-Boilerplate.
@@ -165,6 +165,16 @@ class Frame_Core
 			echo '<!-- NoIndex Added by Frame Core MU Plugin -->';
 			echo '<meta name="robots" content="noindex">';
 		}, 99 );
+
+        add_filter( 'robots_txt', function(){
+
+            $output = "User-agent: *\n";
+            $output  .= "Disallow: /\n";
+
+            return $output;
+
+        } );
+
     }
 
     public function modify_user_capabilities($allcaps)
