@@ -114,6 +114,8 @@ class FC_Conditional_Plugin_Loading {
 
     public function network_load_plugins( $plugins ){
 
+		if ( ! $plugins || empty( $plugins ) ) return $plugins;
+
         $deactivate = $this->get_deactivations();
 
         foreach ( array_keys($plugins) as $plugin_path ) {
@@ -132,6 +134,8 @@ class FC_Conditional_Plugin_Loading {
     }
 
 	public function load_plugins( $plugins ){
+
+		if ( ! $plugins || empty( $plugins ) ) return $plugins;
 
 		$deactivate = $this->get_deactivations();
 
