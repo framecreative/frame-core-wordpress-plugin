@@ -1,5 +1,10 @@
 # Changelog
 
+## Frame Core 2.0.0
+- `MAJOR` Add support for Rollbar Error Logging
+- `MAJOR` Include the Rollbar PHP SDK as a dependency via composer.
+- `MINOR` Site Health Widget and Section is no longer hidden to Frame User
+
 ## Frame Core 1.9.0
 - Disabled site health dashboard widget by default.
 - Configuration options to re-enable dashboard widget or disable site health page completely.

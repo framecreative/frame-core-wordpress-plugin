@@ -28,7 +28,7 @@ class FC_Conditional_Plugin_Loading {
 	 */
 	public function __construct() {
 
-        add_filter('option_active_plugins', [ $this, 'lazy_init_values'], 1 );
+        add_filter( 'option_active_plugins', [ $this, 'lazy_init_values'], 1 );
         add_filter( 'site_option_active_sitewide_plugins', [ $this, 'lazy_init_values' ], 1 );
 
 		add_filter( 'option_active_plugins', [ $this, 'load_plugins' ] );

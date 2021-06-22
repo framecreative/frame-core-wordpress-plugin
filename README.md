@@ -30,7 +30,7 @@ So the client can't change our beautiful custom fields.
 The following general user restrictions are set:
 - Disable installing and deleting plugins
 - Disable installing and switching themes
-- Add a 'Plugin Installation Disabled' notification in the admin 
+- Add a 'Plugin Installation Disabled' notification in the admin
 - **Users will be able to update plugins, themes and Wordpress core**
 
 Set this to `false` if the hand-over has no agreements in place to manage the code.
@@ -51,11 +51,11 @@ FC_SITE_MAINTAINED="true"
 If set to `true` this will:
 - Disable installing, deleting and updating plugins (including Wordpress)
 - Disable installing and switching themes
-- Add a 'Plugin Installation Disabled' notification in the admin 
+- Add a 'Plugin Installation Disabled' notification in the admin
 
 ### Set a custom Frame admin username
 This defines the username of the dev user which will be immune to admin restricts. This user is able to install and update plugins at all times and will be able to edit ACF Field Groups.
-If our admin Wordpress login does _not_ have the username `frame` then you can define the name: 
+If our admin Wordpress login does _not_ have the username `frame` then you can define the name:
 ```
 FC_DEV_USER=""
 ```
@@ -64,7 +64,7 @@ FC_DEV_USER=""
 
 ### Automatic Google Tag Manager embed code
 By entering the ID, Frame Core will add the necessary embed code to the page `<head>` and `<body>`.
-Note: As the code placement is slightly different to the suggested placement you cannot verify the site in google site console (webmaster tools) using the Google Tag Manager verification method. 
+Note: As the code placement is slightly different to the suggested placement you cannot verify the site in google site console (webmaster tools) using the Google Tag Manager verification method.
 ```
 FC_GTM_ID=""
 # values: string (google tag manager container id)
@@ -168,6 +168,14 @@ FC_SMTP_FROM=""
 FC_SMTP_FROM_NAME=""
 ```
 
+## Custom Features - Logging
+
+Send PHP errors to RollBar quickly and easily, just by setting the env variable to the correct API Key for the project.
+```
+# Rollbar Access token (project specific)
+FC_ROLLBAR_API_KEY=""
+```
+
 
 ## Contributing and Extending
 
@@ -185,7 +193,6 @@ We welcome PRs from within the Frame team, however please keep the following in 
 # ALL VALUES IN .ENV ARE STRINGS
 # "true" / "false" will be converted to their boolean equivalents
 #
-
 
 # ==============================================================================
 # PRODUCTION TOOLS - CODE MANAGEMENT
@@ -274,5 +281,11 @@ FC_SMTP_FROM_NAME=""
 # FC_SMTP_PASSWORD="0c2f40265e95e1"
 # FC_SMTP_PORT="2525"
 
+# ==============================================================================
+# Logging
+# ==============================================================================
 
+# values  : string (Rollbar Access Key)
+# default : false / empty string
+# FC_ROLLBAR_API_KEY=""
 ```

@@ -3,7 +3,7 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 1.13.0
+Version: 2.0.0
 Author: Frame
 Author URI: http://framecreative.com.au
 Description: Tools & Helpers to take WordPress to the next level. Works best on Frame Servers, and in projects built using Frame's WP-Boilerplate.
@@ -124,6 +124,7 @@ class Frame_Core
         require_once $this->dir . 'components/conditional-plugin-loading.php';
         require_once $this->dir . 'components/login-screen.php';
         require_once $this->dir . 'components/hide-site-health.php';
+        require_once $this->dir . 'components/rollbar-error-logging.php';
 
         if ( is_admin() ) {
             require_once $this->dir . 'components/disable-admin-nags.php';
@@ -138,7 +139,14 @@ class Frame_Core
         new FC_Content_Freeze();
 		new FC_Login_Screen();
         new FC_Conditional_Plugin_Loading();
-        new FC_Hide_Site_Health();
+
+        if ( ! $this->is_dev_user ){
+			new FC_Hide_Site_Health();
+		}
+
+        if ( self::env() !== 'dev' ){
+        	new FC_Rollbar_Error_Logging();
+		}
 
     }
 

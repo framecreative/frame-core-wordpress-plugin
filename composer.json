@@ -1,7 +1,8 @@
 {
-    "name": "framecreative/frame-core",
-    "type": "wordpress-plugin",
-    "require": {
-        "composer/installers": "~1.0"
-    }
+  "name": "framecreative/frame-core",
+  "type": "wordpress-plugin",
+  "require": {
+	"composer/installers": "~1.0",
+	"rollbar/rollbar": "^2.0"
+  }
 }
