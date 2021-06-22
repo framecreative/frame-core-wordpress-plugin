@@ -1,6 +1,8 @@
 {
   "name": "framecreative/frame-core",
   "type": "wordpress-plugin",
+  "description" : "Frame Core is like normalize.css for your WordPress site. In addition to setting sensible defaults, there's dev helpers and things that assist with working across multiple environments.",
+  "license": "GPL-2.0-or-later",
   "require": {
 	"composer/installers": "~1.0",
 	"rollbar/rollbar": "^2.0"
