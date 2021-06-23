@@ -176,6 +176,9 @@ Send PHP errors to RollBar quickly and easily, just by setting the env variable 
 FC_ROLLBAR_API_KEY=""
 ```
 
+If Rollbar logging has been set up fresh for this project you will need to send an error or message to Rollbar in order to 'activate' the project.
+Use the Query String param `rollbar_test=1` in order to send a test message to Rollbar.
+
 
 ## Contributing and Extending
 

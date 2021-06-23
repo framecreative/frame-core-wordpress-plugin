@@ -17,6 +17,14 @@ class FC_Rollbar_Error_Logging {
 
 		Rollbar\Rollbar::init( $settings );
 
+		if ( isset( $_GET['rollbar_test'] ) && intval( $_GET['rollbar_test'] ) === 1 ){
+
+			$message = 'Testing message from ' . ( defined( WP_HOME ) ? WP_HOME : 'Site URL not defined' );
+
+			Rollbar\Rollbar::log( Rollbar\Payload\Level::INFO, $message );
+
+		}
+
 	}
 
 
