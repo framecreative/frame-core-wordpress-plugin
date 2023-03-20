@@ -3,7 +3,7 @@
 
 Plugin Name: F / R / A / M / E / Core
 Plugin URI: http://framecreative.com.au
-Version: 2.0.2
+Version: 2.0.3
 Author: Frame
 Author URI: http://framecreative.com.au
 Description: Tools & Helpers to take WordPress to the next level. Works best on Frame Servers, and in projects built using Frame's WP-Boilerplate.
@@ -83,7 +83,7 @@ class Frame_Core
         $this->is_site_maintained = self::config('FC_SITE_MAINTAINED', false);
         $this->dev_user           = self::config('FC_DEV_USER', 'frame');
 
-        add_action('init', [ $this, 'check_for_dev_user' ] );
+        add_action('plugins_loaded', [ $this, 'check_for_dev_user' ] );
 
         add_action('init', [ $this, 'prevent_robots' ] );
 
