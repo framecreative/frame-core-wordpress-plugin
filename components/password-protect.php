@@ -15,7 +15,7 @@ class FC_Password_Protected
 
 	var $password;
 
-	var $version = '1.9';
+	var $version = '2.0';
 	var $admin   = null;
 	var $errors  = null;
 
@@ -26,11 +26,15 @@ class FC_Password_Protected
 	function __construct()
 	{
 
-		$this->password = FC()->get_configuration_value( 'FC_PASSWORD_PROTECT_PASSWORD' );
+        if ( is_multisite() )
+            $this->password = FC()->get_configuration_value( 'FC_PASSWORD_PROTECT_PASSWORD_' . get_current_blog_id() );
 
-		if ( !$this->password ) {
-			return;
-		}
+        if ( !$this->password )
+            $this->password = FC()->get_configuration_value( 'FC_PASSWORD_PROTECT_PASSWORD' );
+
+        if ( !$this->password ) {
+            return;
+        }
 
 		$this->errors = new WP_Error();
 

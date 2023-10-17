@@ -2,13 +2,13 @@
 /*
 
 Plugin Name: F / R / A / M / E / Core
-Plugin URI: http://framecreative.com.au
-Version: 2.0.3
+Plugin URI: https://framecreative.com.au
+Version: 2.0.4
 Author: Frame
-Author URI: http://framecreative.com.au
+Author URI: https://framecreative.com.au
 Description: Tools & Helpers to take WordPress to the next level. Works best on Frame Servers, and in projects built using Frame's WP-Boilerplate.
 
-Bitbucket Plugin URI: https://bitbucket.org/framecreative/frame-core
+Bitbucket Plugin URI: https://github.com/framecreative/frame-core-wordpress-plugin
 Bitbucket Branch: master
 
 */
