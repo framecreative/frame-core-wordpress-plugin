@@ -50,9 +50,6 @@ if ( FC()->password_protect->errors->get_error_code()
 	add_action( 'password_protected_login_head', 'wp_shake_js', 12 );
 }
 
-// Obey privacy setting
-add_action( 'password_protected_login_head', 'noindex' );
-
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
@@ -86,6 +83,8 @@ do_action( 'login_enqueue_scripts' );
 do_action( 'password_protected_login_head' );
 
 ?>
+
+<meta name='robots' content='noindex,follow' />
 
 </head>
 <body class="login login-password-protected login-action-password-protected-login wp-core-ui">
