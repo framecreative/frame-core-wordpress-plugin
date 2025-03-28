@@ -15,7 +15,7 @@ class FC_Password_Protected
 
 	var $password;
 
-	var $version = '2.0';
+	var $version = '2.0.1';
 	var $admin   = null;
 	var $errors  = null;
 
@@ -26,8 +26,17 @@ class FC_Password_Protected
 	function __construct()
 	{
 
-        if ( is_multisite() )
-            $this->password = FC()->get_configuration_value( 'FC_PASSWORD_PROTECT_PASSWORD_' . get_current_blog_id() );
+        if ( is_multisite() ) {
+			$site = get_site();
+			$password = FC()->config( 'FC_PASSWORD_PROTECT_PASSWORD_' . $site->id);
+
+			if (!$password) {
+				$site_path = strtoupper( str_replace('/', '_', trim( $site->path, '/' ) ) );
+				$password = FC()->config( 'FC_PASSWORD_PROTECT_PASSWORD_' . $site_path);
+			}
+			
+			$this->password = $password;
+		}
 
         if ( !$this->password )
             $this->password = FC()->get_configuration_value( 'FC_PASSWORD_PROTECT_PASSWORD' );
