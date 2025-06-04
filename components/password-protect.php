@@ -157,8 +157,16 @@ class FC_Password_Protected
 			// URL to redirect back to after login
 			$redirect_to_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 
-				if ( ! empty( $redirect_to_url ) )
-			{
+			if ( ! empty( $redirect_to_url ) ) {
+				$url = parse_url($redirect_to_url);
+				$query_parts = explode('&', $url['query']);
+
+				foreach($query_parts as $part) {
+					[$key, $value] = str_contains($part, '=') ? explode('=', $part) : [$part, ''];
+
+					$redirect_to = add_query_arg( $key, $value, $redirect_to );
+				}
+				
 				$redirect_to = add_query_arg( 'redirect_to', urlencode( $redirect_to_url ), $redirect_to );
 			}
 
