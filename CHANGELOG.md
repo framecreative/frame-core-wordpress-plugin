@@ -1,5 +1,10 @@
 # Changelog
 
+## Frame Core 3.0
+**Requires PHP 8.1 or higher**
+- Updated to latest Rollbar SDK (`2.x` => `4.x`)
+- Updated to latest `composer/installers` package
+
 ## Frame Core 2.0.0
 - `MAJOR` Add support for Rollbar Error Logging
 - `MAJOR` Include the Rollbar PHP SDK as a dependency via composer.
