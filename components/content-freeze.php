@@ -46,12 +46,8 @@ class FC_Content_Freeze {
 	<?php
 	}
 
-	function login_warning_message() {
-	?>
-
-		<div id="login_error">Content for this site is currently frozen.</div>
-
-	<?php
+	function login_warning_message( $message ) {
+		return "<p class='fc__login-env-warning'>Content for this site is currently frozen.</p>" . $message;
 	}
 
 }
