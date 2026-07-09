@@ -106,10 +106,14 @@ class FC_Login_Screen {
 	public function brand_inline_styles()
 	{
 		$logo_url = $this->option( 'logo' );
+		$logo_height = $this->option( 'logo_height' );
+		$logo_width = $this->option( 'logo_width' );
 		$background = $this->option( 'background' );
 		$text_color = $this->option( 'text_color' );
 		$button_color = $this->option( 'button_text_color' ) ?: '#ffffff';
 		$accent_color = $this->option( 'accent_color' );
+		$accent_color_hover = $this->option( 'accent_color_hover' );
+		$button_color_hover = $this->option( 'button_text_color_hover' ) ?: $button_color;
 		$footer_text_color = $this->option( 'footer_text_color' ) ?: $text_color;
 		$footer_text_color_hover = $this->option( 'footer_text_color_hover' ) ?: $accent_color;
 		?>
@@ -117,6 +121,16 @@ class FC_Login_Screen {
 			<?php if( $logo_url ): ?>
 			#login h1 a {
 				background-image: url("<?php echo $logo_url; ?>");
+			}
+			<?php endif; ?>
+			<?php if( $logo_height || $logo_width ): ?>
+			#login h1 a {
+				<?php if( $logo_height ): ?>
+				height: <?php echo $logo_height; ?>;
+				<?php endif; ?>
+				<?php if( $logo_width ): ?>
+				width: <?php echo $logo_width; ?>;
+				<?php endif; ?>
 			}
 			<?php endif; ?>
 			<?php if( $background ): ?>
@@ -139,9 +153,15 @@ class FC_Login_Screen {
 
 			.wp-core-ui #login .button-primary:hover,
 			.wp-core-ui #login .button-primary:focus {
+				<?php if( $accent_color_hover ): ?>
+				border: solid 1px <?php echo $accent_color_hover; ?>;
+				background-color: <?php echo $accent_color_hover; ?>;
+				color: <?php echo $button_color_hover; ?>;
+				<?php else: ?>
 				border: solid 1px <?php echo $accent_color; ?>;
 				background-color: transparent;
 				color: <?php echo $accent_color; ?>;
+				<?php endif; ?>
 			}
 
 			#login #nav a:hover,
@@ -185,6 +205,9 @@ class FC_Login_Screen {
  	$args = [
 		// Path to logo (can use asset_url etc)
 		'logo' => '',
+		// Optional logo dimensions (any CSS length) - core default is 84px square
+		'logo_height' => '200px',
+		'logo_width' => '200px',
 		// Full CSS background property accepted, not just color;
 		'background' => '#fff',
 		// Main text color of the page
@@ -193,6 +216,10 @@ class FC_Login_Screen {
 		'accent_color' => '#ff0000',
 		// Ensure the button text can be seen against the accent color;
 		'button_text_color' => '#fff',
+		// Optional button hover/focus background - if unset the hover inverts the accent (transparent bg, accent text)
+		'accent_color_hover' => false,
+		// Button hover/focus text color - defaults to `button_text_color`
+		'button_text_color_hover' => false,
 		// Defaults to `text_color` if not set
 		'footer_text_color' => false,
 		// Useful if you use the accent color as background too
