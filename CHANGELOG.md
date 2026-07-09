@@ -1,5 +1,12 @@
 # Changelog
 
+## Frame Core 3.1
+- Login branding (logo detection + `custom-login` theme support) now also applies to the password protect screen, via the `password_protected_login_head` action (works with the built-in gate and the standalone Password Protected plugin)
+- New `custom-login` options: `logo_height`, `logo_width`, `accent_color_hover`, `button_text_color_hover`
+- Content freeze login notice now uses the env-warning card styling so it reads correctly on branded backgrounds, and returns through the `login_message` filter instead of echoing
+- Removed dead `login_body_classes` hook and tidied login filter registrations
+- Fixed typo in the login environment warning
+
 ## Frame Core 3.0
 **Requires PHP 8.1 or higher**
 - Updated to latest Rollbar SDK (`2.x` => `4.x`)
