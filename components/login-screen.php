@@ -11,10 +11,8 @@ class FC_Login_Screen {
 
 		add_action( 'login_head', [ $this, 'inline_styles' ] );
 
-		add_filter( 'login_headerurl', [ $this, 'login_header_url' ], 1, 10 );
-		add_filter( 'login_headertext', [ $this, 'login_header_text' ], 1 , 10 );
-
-		add_filter( 'login_body_classes', [ $this, 'login_body_classes' ], 2 , 10 );
+		add_filter( 'login_headerurl', [ $this, 'login_header_url' ] );
+		add_filter( 'login_headertext', [ $this, 'login_header_text' ] );
 
 		add_filter( 'login_message', [ $this, 'env_warning' ] );
 
