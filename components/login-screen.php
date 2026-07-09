@@ -10,6 +10,7 @@ class FC_Login_Screen {
 		/* Always run these hooks */
 
 		add_action( 'login_head', [ $this, 'inline_styles' ] );
+		add_action( 'password_protected_login_head', [ $this, 'inline_styles' ] );
 
 		add_filter( 'login_headerurl', [ $this, 'login_header_url' ] );
 		add_filter( 'login_headertext', [ $this, 'login_header_text' ] );
@@ -90,7 +91,7 @@ class FC_Login_Screen {
 
 	public function env_warning( $message )
 	{
-		return "<p class='fc__login-env-warning'>Your are logging into the <span>" . WP_ENV . "</span> environment</p>" . $message;
+		return "<p class='fc__login-env-warning'>You are logging into the <span>" . WP_ENV . "</span> environment</p>" . $message;
 	}
 
 	public function register_brand_login(){
@@ -99,6 +100,7 @@ class FC_Login_Screen {
 
 		$this->_options = $options;
 		add_action( 'login_head', [ $this, 'brand_inline_styles' ] );
+		add_action( 'password_protected_login_head', [ $this, 'brand_inline_styles' ] );
 	}
 
 	public function brand_inline_styles()
